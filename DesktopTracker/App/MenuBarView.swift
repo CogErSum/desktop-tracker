@@ -1,25 +1,25 @@
 import SwiftUI
 
 struct MenuBarView: View {
-    @State private var timerViewModel = TimerViewModel()
+    @StateObject private var timerState = TimerState.shared
     @State private var recentCards: [RecentCard] = []
     @State private var showingPicker = false
     @State private var tick = false
     
     var body: some View {
-        if let timer = timerViewModel.activeTimer {
+        if let timer = timerState.activeTimer {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Image(systemName: "timer")
                         .foregroundColor(.green)
-                    Text(timerViewModel.formattedTime(timerViewModel.elapsed))
+                    Text(timerState.formattedTime(timerState.elapsed))
                         .font(.system(.body, design: .monospaced))
                         .foregroundColor(.green)
                         .id(tick)
                 }
                 
-                if !timerViewModel.activeCardName.isEmpty {
-                    Text(timerViewModel.activeCardName)
+                if !timerState.activeCardName.isEmpty {
+                    Text(timerState.activeCardName)
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .lineLimit(1)
@@ -29,13 +29,12 @@ struct MenuBarView: View {
             .frame(minWidth: 180)
             .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
                 tick.toggle()
-                timerViewModel.updateElapsed()
             }
             
             Divider()
             
             Button("Stop Timer") {
-                Task { await timerViewModel.stopTimer() }
+                Task { await timerState.stopTimer() }
             }
         } else {
             Menu("Start Timer") {
@@ -45,7 +44,7 @@ struct MenuBarView: View {
                 } else {
                     ForEach(recentCards) { card in
                         Button(card.name) {
-                            Task { await timerViewModel.startTimer(cardId: card.id) }
+                            Task { await timerState.startTimer(cardId: card.id) }
                         }
                     }
                 }
@@ -72,12 +71,12 @@ struct MenuBarView: View {
         }
         .keyboardShortcut("q")
         .task {
-            await timerViewModel.checkActiveTimer()
+            await timerState.checkActiveTimer()
             await loadRecentCards()
         }
         .sheet(isPresented: $showingPicker) {
             MenuBarCardPicker(selectedCard: { cardId in
-                Task { await timerViewModel.startTimer(cardId: cardId) }
+                Task { await timerState.startTimer(cardId: cardId) }
             })
         }
     }

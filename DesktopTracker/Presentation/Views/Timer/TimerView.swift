@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TimerView: View {
-    @State private var viewModel = TimerViewModel()
+    @StateObject private var timerState = TimerState.shared
     @State private var boards: [Board] = []
     @State private var selectedBoard: Board?
     @State private var cards: [BoardCard] = []
@@ -14,15 +14,15 @@ struct TimerView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                if let timer = viewModel.activeTimer {
+                if let timer = timerState.activeTimer {
                     activeTimerView(timer)
-                } else if let conflict = viewModel.conflictInfo {
+                } else if let conflict = timerState.conflictInfo {
                     conflictView(conflict)
                 } else {
                     startTimerView
                 }
                 
-                if let error = viewModel.error {
+                if let error = timerState.error {
                     Text(error)
                         .foregroundColor(Color.tmst.error)
                         .font(.caption)
@@ -32,7 +32,7 @@ struct TimerView: View {
         }
         .navigationTitle("Timer")
         .task {
-            await viewModel.checkActiveTimer()
+            await timerState.checkActiveTimer()
             await loadBoards()
         }
     }
@@ -125,11 +125,11 @@ struct TimerView: View {
             Button("Start Timer") {
                 Task {
                     if let card = selectedCard {
-                        await viewModel.startTimer(cardId: card.id)
+                        await timerState.startTimer(cardId: card.id)
                     }
                 }
             }
-            .disabled(selectedCard == nil || viewModel.loading)
+            .disabled(selectedCard == nil || timerState.loading)
             .buttonStyle(.borderedProminent)
             .tint(Color.tmst.accent)
         }
@@ -143,7 +143,7 @@ struct TimerView: View {
                     .foregroundColor(Color.tmst.accent)
                 
                 VStack(alignment: .leading) {
-                    Text(viewModel.formattedTime(viewModel.elapsed))
+                    Text(timerState.formattedTime(timerState.elapsed))
                         .font(.system(.title, design: .monospaced))
                         .foregroundColor(Color.tmst.accent)
                     
@@ -154,9 +154,9 @@ struct TimerView: View {
             }
             
             Button("Stop Timer") {
-                Task { await viewModel.stopTimer() }
+                Task { await timerState.stopTimer() }
             }
-            .disabled(viewModel.loading)
+            .disabled(timerState.loading)
             .buttonStyle(.borderedProminent)
             .tint(Color.tmst.error)
         }
@@ -181,10 +181,10 @@ struct TimerView: View {
             
             Button("Stop & Start New Timer") {
                 if let card = selectedCard {
-                    Task { await viewModel.stopAndStart(cardId: card.id) }
+                    Task { await timerState.stopAndStart(cardId: card.id) }
                 }
             }
-            .disabled(viewModel.loading || selectedCard == nil)
+            .disabled(timerState.loading || selectedCard == nil)
             .buttonStyle(.borderedProminent)
             .tint(Color.tmst.warning)
         }
