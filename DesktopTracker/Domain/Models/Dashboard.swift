@@ -37,3 +37,20 @@ struct WeeklyStats: Identifiable, Codable {
         self.totalSeconds = totalSeconds
     }
 }
+
+struct CardNamesResponse: Codable {
+    let cards: [CardNameItem]
+}
+
+struct CardNameItem: Codable {
+    let id: String
+    let name: String
+}
+
+struct EstimateResponse: Codable {
+    let estimatedMin: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case estimatedMin = "estimated_min"
+    }
+}

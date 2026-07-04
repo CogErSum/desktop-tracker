@@ -16,7 +16,7 @@ struct RecordDetail: View {
             
             Group {
                 detailRow(label: "Duration", value: formatDuration(record.durationSec))
-                detailRow(label: "Date", value: formatDate(record.recordDate ?? record.createdAt))
+                detailRow(label: "Date", value: formatDateString(record.recordDate ?? record.createdAt))
                 if let comment = record.comment {
                     detailRow(label: "Comment", value: comment)
                 }
@@ -43,10 +43,15 @@ struct RecordDetail: View {
         }
     }
     
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+    private func formatDateString(_ dateString: String) -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        guard let date = formatter.date(from: dateString) ?? ISO8601DateFormatter().date(from: dateString) else {
+            return String(dateString.prefix(10))
+        }
+        let displayFormatter = DateFormatter()
+        displayFormatter.dateStyle = .long
+        displayFormatter.timeStyle = .short
+        return displayFormatter.string(from: date)
     }
 }

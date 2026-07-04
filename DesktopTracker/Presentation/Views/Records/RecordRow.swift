@@ -10,7 +10,7 @@ struct RecordRow: View {
             VStack(alignment: .leading) {
                 Text(cardName)
                     .font(.headline)
-                Text(record.recordDate ?? record.createdAt, style: .date)
+                Text(formatDateString(record.recordDate ?? record.createdAt))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -30,5 +30,17 @@ struct RecordRow: View {
             }
         }
         .padding(.vertical, 4)
+    }
+    
+    private func formatDateString(_ dateString: String) -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        guard let date = formatter.date(from: dateString) ?? ISO8601DateFormatter().date(from: dateString) else {
+            return String(dateString.prefix(10))
+        }
+        let displayFormatter = DateFormatter()
+        displayFormatter.dateStyle = .medium
+        displayFormatter.timeStyle = .short
+        return displayFormatter.string(from: date)
     }
 }

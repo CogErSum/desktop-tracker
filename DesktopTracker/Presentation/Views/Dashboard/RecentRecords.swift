@@ -42,9 +42,14 @@ struct RecentRecords: View {
         }
     }
     
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM"
-        return formatter.string(from: date)
+    private func formatDate(_ dateString: String) -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        guard let date = formatter.date(from: dateString) ?? ISO8601DateFormatter().date(from: dateString) else {
+            return String(dateString.prefix(10))
+        }
+        let displayFormatter = DateFormatter()
+        displayFormatter.dateFormat = "dd MMM"
+        return displayFormatter.string(from: date)
     }
 }

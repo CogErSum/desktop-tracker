@@ -66,14 +66,10 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
     }
     
     func getCardNames(cardIds: [String]) async throws -> [String: String] {
-        let response: [String: Any] = try await apiClient.request(BoardsEndpoint.cardNames(cardIds: cardIds))
+        let response: CardNamesResponse = try await apiClient.request(BoardsEndpoint.cardNames(cardIds: cardIds))
         var result: [String: String] = [:]
-        if let cards = response["cards"] as? [[String: Any]] {
-            for card in cards {
-                if let id = card["id"] as? String, let name = card["name"] as? String {
-                    result[id] = name
-                }
-            }
+        for card in response.cards {
+            result[card.id] = card.name
         }
         return result
     }
@@ -83,8 +79,8 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
     }
     
     func getEstimate(cardId: String) async throws -> Int? {
-        let response: [String: Any] = try await apiClient.request(EstimatesEndpoint.get(cardId: cardId))
-        return response["estimated_min"] as? Int
+        let response: EstimateResponse = try await apiClient.request(EstimatesEndpoint.get(cardId: cardId))
+        return response.estimatedMin
     }
     
     func setEstimate(cardId: String, minutes: Int) async throws {
