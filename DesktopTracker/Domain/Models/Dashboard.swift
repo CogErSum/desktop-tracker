@@ -14,14 +14,26 @@ struct DashboardData: Codable {
     }
 }
 
-struct DailyStats: Identifiable {
-    let id = UUID()
+struct DailyStats: Identifiable, Codable {
+    let id: UUID
     let date: Date
     let totalSeconds: Int
+    
+    init(id: UUID = UUID(), date: Date, totalSeconds: Int) {
+        self.id = id
+        self.date = date
+        self.totalSeconds = totalSeconds
+    }
 }
 
-struct WeeklyStats: Identifiable {
-    let id = UUID()
+struct WeeklyStats: Identifiable, Codable {
+    let id: UUID
     let weekStart: Date
     let totalSeconds: Int
+    
+    init(id: UUID = UUID(), weekStart: Date, totalSeconds: Int) {
+        self.id = id
+        self.weekStart = weekStart
+        self.totalSeconds = totalSeconds
+    }
 }
