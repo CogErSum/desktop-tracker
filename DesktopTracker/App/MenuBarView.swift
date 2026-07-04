@@ -4,6 +4,7 @@ struct MenuBarView: View {
     @State private var timerViewModel = TimerViewModel()
     @State private var recentCards: [RecentCard] = []
     @State private var showingPicker = false
+    @State private var showingDashboard = false
     @State private var tick = false
     
     var body: some View {
@@ -61,8 +62,15 @@ struct MenuBarView: View {
         Divider()
         
         Button("Open Dashboard") {
-            print("[MenuBar] Open Dashboard clicked")
-            openMainWindow()
+            for window in NSApp.windows {
+                if window.title == "TeamSight Tracker" {
+                    window.makeKeyAndOrderFront(nil)
+                    NSApp.activate(ignoringOtherApps: true)
+                    return
+                }
+            }
+            NSApp.sendAction(Selector(("showWindows")), to: nil, from: nil)
+            NSApp.activate(ignoringOtherApps: true)
         }
         .keyboardShortcut("d")
         
