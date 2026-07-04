@@ -61,6 +61,7 @@ struct MenuBarView: View {
         Divider()
         
         Button("Open Dashboard") {
+            print("[MenuBar] Open Dashboard clicked")
             openMainWindow()
         }
         .keyboardShortcut("d")
