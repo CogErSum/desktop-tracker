@@ -37,14 +37,17 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
         await cache.invalidateAll()
     }
     
-    func getRecords(memberId: String) async throws -> [TimeRecord] {
-        let key = "records_\(memberId)"
-        if let cached: [TimeRecord] = await cache.get(key) {
-            return cached
+    func getRecords(memberId: String, limit: Int = 50, offset: Int = 0) async throws -> (records: [TimeRecord], total: Int) {
+        let key = "records_\(memberId)_\(limit)_\(offset)"
+        if let cached: PaginatedRecords = await cache.get(key) {
+            return (cached.records, cached.total)
         }
-        let records: [TimeRecord] = try await apiClient.request(RecordsEndpoint.list, memberId: memberId)
-        await cache.set(key, data: records)
-        return records
+        let response: PaginatedRecords = try await apiClient.request(
+            RecordsEndpoint.list(limit: limit, offset: offset),
+            memberId: memberId
+        )
+        await cache.set(key, data: response)
+        return (response.records, response.total)
     }
     
     func createRecord(memberId: String, cardId: String, duration: Int, comment: String?, date: String?) async throws -> TimeRecord {

@@ -5,7 +5,7 @@ protocol TimeTrackerRepository {
     func startTimer(memberId: String, cardId: String) async throws -> ActiveTimer
     func stopTimer(memberId: String) async throws
     
-    func getRecords(memberId: String) async throws -> [TimeRecord]
+    func getRecords(memberId: String, limit: Int, offset: Int) async throws -> (records: [TimeRecord], total: Int)
     func createRecord(memberId: String, cardId: String, duration: Int, comment: String?, date: String?) async throws -> TimeRecord
     func updateRecord(id: String, duration: Int?, comment: String?) async throws -> TimeRecord
     func deleteRecord(id: String) async throws

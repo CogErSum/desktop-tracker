@@ -1,15 +1,15 @@
 import Foundation
 
 enum RecordsEndpoint: Endpoint {
-    case list
+    case list(limit: Int, offset: Int)
     case create(cardId: String, durationMin: Int, date: String, comment: String?)
     case update(id: String, durationMin: Int?, date: String?, comment: String?)
     case delete(id: String)
     
     var path: String {
         switch self {
-        case .list:
-            return "/api/v1/records"
+        case .list(let limit, let offset):
+            return "/api/v1/records?limit=\(limit)&offset=\(offset)"
         case .create:
             return "/api/v1/records"
         case .update(let id, _, _, _):
@@ -52,4 +52,11 @@ enum RecordsEndpoint: Endpoint {
             return nil
         }
     }
+}
+
+struct PaginatedRecords: Codable {
+    let records: [TimeRecord]
+    let total: Int
+    let limit: Int
+    let offset: Int
 }

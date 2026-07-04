@@ -8,11 +8,15 @@ class RecordsViewModel {
     private var memberId: String
     
     var records: [TimeRecord] = []
+    var totalRecords = 0
     var cardNames: [String: String] = [:]
     var loading = false
+    var loadingMore = false
     var error: String?
     var selectedRecord: TimeRecord?
     var searchText = ""
+    
+    private let pageSize = 10
     
     init(repository: TimeTrackerRepository = TimeTrackerRepositoryImpl(), memberId: String? = nil) {
         self.repository = repository
@@ -22,15 +26,13 @@ class RecordsViewModel {
     func loadRecords() async {
         loading = true
         error = nil
+        records = []
         
         do {
-            let fetchedRecords = try await repository.getRecords(memberId: memberId)
-            records = fetchedRecords
-            
-            let cardIds = Array(Set(fetchedRecords.map { $0.trelloCardId }))
-            if !cardIds.isEmpty {
-                cardNames = try await repository.getCardNames(cardIds: cardIds)
-            }
+            let result = try await repository.getRecords(memberId: memberId, limit: pageSize, offset: 0)
+            records = result.records
+            totalRecords = result.total
+            await loadCardNames(for: result.records)
         } catch {
             print("Records load error: \(error)")
             self.error = "Failed to load records"
@@ -39,10 +41,39 @@ class RecordsViewModel {
         loading = false
     }
     
+    func loadMore() async {
+        guard !loadingMore, records.count < totalRecords else { return }
+        
+        loadingMore = true
+        
+        do {
+            let result = try await repository.getRecords(memberId: memberId, limit: pageSize, offset: records.count)
+            records.append(contentsOf: result.records)
+            await loadCardNames(for: result.records)
+        } catch {
+            print("Load more error: \(error)")
+        }
+        
+        loadingMore = false
+    }
+    
+    private func loadCardNames(for newRecords: [TimeRecord]) async {
+        let newCardIds = Array(Set(newRecords.map { $0.trelloCardId })).filter { cardNames[$0] == nil }
+        if !newCardIds.isEmpty {
+            do {
+                let names = try await repository.getCardNames(cardIds: newCardIds)
+                cardNames.merge(names) { _, new in new }
+            } catch {
+                print("Failed to load card names: \(error)")
+            }
+        }
+    }
+    
     func deleteRecord(_ record: TimeRecord) async {
         do {
             try await repository.deleteRecord(id: record.id)
             records.removeAll { $0.id == record.id }
+            totalRecords -= 1
         } catch {
             self.error = "Failed to delete record"
         }
