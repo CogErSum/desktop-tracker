@@ -3,6 +3,10 @@ import SwiftUI
 @main
 struct DesktopTrackerApp: App {
     var body: some Scene {
+        MenuBarExtra("TeamSight", systemImage: "timer") {
+            MenuBarView()
+        }
+        
         WindowGroup("TeamSight Tracker") {
             ContentView()
         }

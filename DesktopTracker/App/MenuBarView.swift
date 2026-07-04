@@ -2,7 +2,6 @@ import SwiftUI
 
 struct MenuBarView: View {
     @State private var timerViewModel = TimerViewModel()
-    @State private var showingStartTimer = false
     @State private var cardName: String = ""
     
     var body: some View {
@@ -21,13 +20,10 @@ struct MenuBarView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .lineLimit(1)
-                } else {
-                    Text(String(timer.trelloCardId.prefix(12)) + "...")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .frame(maxWidth: 200)
                 }
             }
-            .frame(minWidth: 200)
+            .frame(minWidth: 180)
             
             Divider()
             
@@ -35,29 +31,11 @@ struct MenuBarView: View {
                 Task { await timerViewModel.stopTimer() }
                 cardName = ""
             }
-            .keyboardShortcut("s")
         } else {
-            Button("Start Timer...") {
-                showingStartTimer = true
-            }
-            .keyboardShortcut("t")
-            
             Text("No active timer")
                 .foregroundColor(.secondary)
+                .frame(minWidth: 150)
         }
-        
-        Divider()
-        
-        Button("Open Dashboard") {
-            for window in NSApplication.shared.windows {
-                if window.title == "TeamSight Tracker" {
-                    window.makeKeyAndOrderFront(nil)
-                    NSApp.activate(ignoringOtherApps: true)
-                    break
-                }
-            }
-        }
-        .keyboardShortcut("d")
         
         Divider()
         
@@ -65,17 +43,6 @@ struct MenuBarView: View {
             NSApplication.shared.terminate(nil)
         }
         .keyboardShortcut("q")
-        .sheet(isPresented: $showingStartTimer) {
-            StartTimerView()
-                .onDisappear {
-                    Task {
-                        await timerViewModel.checkActiveTimer()
-                        if let timer = timerViewModel.activeTimer {
-                            await fetchCardName(cardId: timer.trelloCardId)
-                        }
-                    }
-                }
-        }
         .task {
             await timerViewModel.checkActiveTimer()
             if let timer = timerViewModel.activeTimer {
