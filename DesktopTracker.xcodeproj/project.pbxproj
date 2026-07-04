@@ -11,6 +11,41 @@
 		A1000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000002 /* ContentView.swift */; };
 		A1000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000003 /* Assets.xcassets */; };
 		A1000004 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000005 /* MenuBarView.swift */; };
+		A1000005 /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000006 /* TimerViewModel.swift */; };
+		A1000006 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000007 /* DashboardViewModel.swift */; };
+		A1000007 /* RecordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000008 /* RecordsViewModel.swift */; };
+		A1000008 /* ManualEntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000009 /* ManualEntryViewModel.swift */; };
+		A1000009 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000010 /* SettingsViewModel.swift */; };
+		A1000010 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000011 /* TimerView.swift */; };
+		A1000011 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000012 /* DashboardView.swift */; };
+		A1000012 /* StatsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000013 /* StatsCard.swift */; };
+		A1000013 /* RecentRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000014 /* RecentRecords.swift */; };
+		A1000014 /* DailyChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000015 /* DailyChart.swift */; };
+		A1000015 /* WeeklyChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000016 /* WeeklyChart.swift */; };
+		A1000016 /* MonthlyChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000017 /* MonthlyChart.swift */; };
+		A1000017 /* RecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000018 /* RecordsView.swift */; };
+		A1000018 /* RecordRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000019 /* RecordRow.swift */; };
+		A1000019 /* RecordDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000020 /* RecordDetail.swift */; };
+		A1000020 /* ManualEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000021 /* ManualEntryView.swift */; };
+		A1000021 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000022 /* SettingsView.swift */; };
+		A1000022 /* CardPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000023 /* CardPicker.swift */; };
+		A1000023 /* ExportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000024 /* ExportButton.swift */; };
+		A1000024 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000025 /* LoadingView.swift */; };
+		A1000025 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000026 /* Timer.swift */; };
+		A1000026 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000027 /* Record.swift */; };
+		A1000027 /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000028 /* Dashboard.swift */; };
+		A1000028 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000029 /* Card.swift */; };
+		A1000029 /* TimeTrackerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000030 /* TimeTrackerRepository.swift */; };
+		A1000030 /* ExportUseCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000031 /* ExportUseCases.swift */; };
+		A1000031 /* TimeTrackerRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000032 /* TimeTrackerRepositoryImpl.swift */; };
+		A1000032 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000033 /* APIClient.swift */; };
+		A1000033 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000034 /* APIError.swift */; };
+		A1000034 /* TimerEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000035 /* TimerEndpoint.swift */; };
+		A1000035 /* RecordsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000036 /* RecordsEndpoint.swift */; };
+		A1000036 /* DashboardEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000037 /* DashboardEndpoint.swift */; };
+		A1000037 /* ExportEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000038 /* ExportEndpoint.swift */; };
+		A1000038 /* BoardsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000039 /* BoardsEndpoint.swift */; };
+		A1000039 /* EstimatesEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000040 /* EstimatesEndpoint.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +54,41 @@
 		A2000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2000004 /* DesktopTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DesktopTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000005 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		A2000006 /* TimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewModel.swift; sourceTree = "<group>"; };
+		A2000007 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		A2000008 /* RecordsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsViewModel.swift; sourceTree = "<group>"; };
+		A2000009 /* ManualEntryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualEntryViewModel.swift; sourceTree = "<group>"; };
+		A2000010 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		A2000011 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		A2000012 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		A2000013 /* StatsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsCard.swift; sourceTree = "<group>"; };
+		A2000014 /* RecentRecords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentRecords.swift; sourceTree = "<group>"; };
+		A2000015 /* DailyChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChart.swift; sourceTree = "<group>"; };
+		A2000016 /* WeeklyChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChart.swift; sourceTree = "<group>"; };
+		A2000017 /* MonthlyChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyChart.swift; sourceTree = "<group>"; };
+		A2000018 /* RecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsView.swift; sourceTree = "<group>"; };
+		A2000019 /* RecordRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRow.swift; sourceTree = "<group>"; };
+		A2000020 /* RecordDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetail.swift; sourceTree = "<group>"; };
+		A2000021 /* ManualEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualEntryView.swift; sourceTree = "<group>"; };
+		A2000022 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A2000023 /* CardPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPicker.swift; sourceTree = "<group>"; };
+		A2000024 /* ExportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportButton.swift; sourceTree = "<group>"; };
+		A2000025 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		A2000026 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
+		A2000027 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
+		A2000028 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
+		A2000029 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		A2000030 /* TimeTrackerRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTrackerRepository.swift; sourceTree = "<group>"; };
+		A2000031 /* ExportUseCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportUseCases.swift; sourceTree = "<group>"; };
+		A2000032 /* TimeTrackerRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTrackerRepositoryImpl.swift; sourceTree = "<group>"; };
+		A2000033 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		A2000034 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		A2000035 /* TimerEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEndpoint.swift; sourceTree = "<group>"; };
+		A2000036 /* RecordsEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsEndpoint.swift; sourceTree = "<group>"; };
+		A2000037 /* DashboardEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardEndpoint.swift; sourceTree = "<group>"; };
+		A2000038 /* ExportEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportEndpoint.swift; sourceTree = "<group>"; };
+		A2000039 /* BoardsEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsEndpoint.swift; sourceTree = "<group>"; };
+		A2000040 /* EstimatesEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstimatesEndpoint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,7 +115,9 @@
 			children = (
 				A4000003 /* App */,
 				A4000005 /* Presentation */,
-				A4000007 /* Resources */,
+				A4000007 /* Domain */,
+				A4000010 /* Data */,
+				A4000013 /* Resources */,
 			);
 			path = DesktopTracker;
 			sourceTree = "<group>";
@@ -71,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				A4000006 /* Views */,
+				A4000008 /* ViewModels */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -79,16 +152,176 @@
 			isa = PBXGroup;
 			children = (
 				A2000002 /* ContentView.swift */,
+				A4000009 /* Timer */,
+				A4000014 /* Dashboard */,
+				A4000017 /* Records */,
+				A4000020 /* ManualEntry */,
+				A4000022 /* Settings */,
+				A4000023 /* Components */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		A4000007 /* Resources */ = {
+		A4000007 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				A4000011 /* Models */,
+				A4000012 /* Repositories */,
+				A4000021 /* UseCases */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		A4000008 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A2000006 /* TimerViewModel.swift */,
+				A2000007 /* DashboardViewModel.swift */,
+				A2000008 /* RecordsViewModel.swift */,
+				A2000009 /* ManualEntryViewModel.swift */,
+				A2000010 /* SettingsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A4000009 /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				A2000011 /* TimerView.swift */,
+			);
+			path = Timer;
+			sourceTree = "<group>";
+		};
+		A4000010 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				A4000015 /* Network */,
+				A4000019 /* Repositories */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		A4000011 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A2000026 /* Timer.swift */,
+				A2000027 /* Record.swift */,
+				A2000028 /* Dashboard.swift */,
+				A2000029 /* Card.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A4000012 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				A2000030 /* TimeTrackerRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		A4000013 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				A2000003 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		A4000014 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				A2000012 /* DashboardView.swift */,
+				A2000013 /* StatsCard.swift */,
+				A2000014 /* RecentRecords.swift */,
+				A4000016 /* Charts */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		A4000015 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				A2000033 /* APIClient.swift */,
+				A2000034 /* APIError.swift */,
+				A4000018 /* Endpoints */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		A4000016 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				A2000015 /* DailyChart.swift */,
+				A2000016 /* WeeklyChart.swift */,
+				A2000017 /* MonthlyChart.swift */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		A4000017 /* Records */ = {
+			isa = PBXGroup;
+			children = (
+				A2000018 /* RecordsView.swift */,
+				A2000019 /* RecordRow.swift */,
+				A2000020 /* RecordDetail.swift */,
+			);
+			path = Records;
+			sourceTree = "<group>";
+		};
+		A4000018 /* Endpoints */ = {
+			isa = PBXGroup;
+			children = (
+				A2000035 /* TimerEndpoint.swift */,
+				A2000036 /* RecordsEndpoint.swift */,
+				A2000037 /* DashboardEndpoint.swift */,
+				A2000038 /* ExportEndpoint.swift */,
+				A2000039 /* BoardsEndpoint.swift */,
+				A2000040 /* EstimatesEndpoint.swift */,
+			);
+			path = Endpoints;
+			sourceTree = "<group>";
+		};
+		A4000019 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				A2000032 /* TimeTrackerRepositoryImpl.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		A4000020 /* ManualEntry */ = {
+			isa = PBXGroup;
+			children = (
+				A2000021 /* ManualEntryView.swift */,
+			);
+			path = ManualEntry;
+			sourceTree = "<group>";
+		};
+		A4000021 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				A2000031 /* ExportUseCases.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		A4000022 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A2000022 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A4000023 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A2000023 /* CardPicker.swift */,
+				A2000024 /* ExportButton.swift */,
+				A2000025 /* LoadingView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +396,41 @@
 				A1000001 /* DesktopTrackerApp.swift in Sources */,
 				A1000002 /* ContentView.swift in Sources */,
 				A1000004 /* MenuBarView.swift in Sources */,
+				A1000005 /* TimerViewModel.swift in Sources */,
+				A1000006 /* DashboardViewModel.swift in Sources */,
+				A1000007 /* RecordsViewModel.swift in Sources */,
+				A1000008 /* ManualEntryViewModel.swift in Sources */,
+				A1000009 /* SettingsViewModel.swift in Sources */,
+				A1000010 /* TimerView.swift in Sources */,
+				A1000011 /* DashboardView.swift in Sources */,
+				A1000012 /* StatsCard.swift in Sources */,
+				A1000013 /* RecentRecords.swift in Sources */,
+				A1000014 /* DailyChart.swift in Sources */,
+				A1000015 /* WeeklyChart.swift in Sources */,
+				A1000016 /* MonthlyChart.swift in Sources */,
+				A1000017 /* RecordsView.swift in Sources */,
+				A1000018 /* RecordRow.swift in Sources */,
+				A1000019 /* RecordDetail.swift in Sources */,
+				A1000020 /* ManualEntryView.swift in Sources */,
+				A1000021 /* SettingsView.swift in Sources */,
+				A1000022 /* CardPicker.swift in Sources */,
+				A1000023 /* ExportButton.swift in Sources */,
+				A1000024 /* LoadingView.swift in Sources */,
+				A1000025 /* Timer.swift in Sources */,
+				A1000026 /* Record.swift in Sources */,
+				A1000027 /* Dashboard.swift in Sources */,
+				A1000028 /* Card.swift in Sources */,
+				A1000029 /* TimeTrackerRepository.swift in Sources */,
+				A1000030 /* ExportUseCases.swift in Sources */,
+				A1000031 /* TimeTrackerRepositoryImpl.swift in Sources */,
+				A1000032 /* APIClient.swift in Sources */,
+				A1000033 /* APIError.swift in Sources */,
+				A1000034 /* TimerEndpoint.swift in Sources */,
+				A1000035 /* RecordsEndpoint.swift in Sources */,
+				A1000036 /* DashboardEndpoint.swift in Sources */,
+				A1000037 /* ExportEndpoint.swift in Sources */,
+				A1000038 /* BoardsEndpoint.swift in Sources */,
+				A1000039 /* EstimatesEndpoint.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
