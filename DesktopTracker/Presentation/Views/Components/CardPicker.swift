@@ -1,11 +1,16 @@
 import SwiftUI
 
+struct RecentCard: Identifiable {
+    let id: String
+    let name: String
+}
+
 struct CardPicker: View {
     @Binding var selectedCardId: String
     let memberId: String
     
     @State private var searchText = ""
-    @State private var recentCards: [(id: String, name: String)] = []
+    @State private var recentCards: [RecentCard] = []
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -17,7 +22,7 @@ struct CardPicker: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                 
-                ForEach(recentCards, id: \.id) { card in
+                ForEach(recentCards) { card in
                     Button(card.name) {
                         selectedCardId = card.id
                         searchText = card.name
@@ -36,8 +41,8 @@ struct CardPicker: View {
         let repository = TimeTrackerRepositoryImpl()
         do {
             let records = try await repository.getRecords(memberId: memberId)
-            let uniqueCards = Array(Set(records.map { ($0.trelloCardId, $0.trelloCardId) }))
-            recentCards = Array(uniqueCards.prefix(5))
+            let uniqueIds = Array(Set(records.map { $0.trelloCardId }))
+            recentCards = uniqueIds.prefix(5).map { RecentCard(id: $0, name: $0) }
         } catch {
             // Silent fail
         }
