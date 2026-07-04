@@ -4,7 +4,6 @@ struct MenuBarView: View {
     @State private var timerViewModel = TimerViewModel()
     @State private var recentCards: [RecentCard] = []
     @State private var showingPicker = false
-    @State private var showingDashboard = false
     @State private var tick = false
     
     var body: some View {
@@ -62,7 +61,7 @@ struct MenuBarView: View {
         Divider()
         
         Button("Open Dashboard") {
-            AppDelegate.shared.showWindow()
+            AppDelegate.shared.showMainWindow()
         }
         .keyboardShortcut("d")
         

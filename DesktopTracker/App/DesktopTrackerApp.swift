@@ -9,62 +9,49 @@ struct DesktopTrackerApp: App {
             MenuBarView()
         }
         
-        WindowGroup("TeamSight Tracker") {
-            ContentView()
-                .background(CaptureWindow())
+        Settings {
+            SettingsView()
         }
-        .defaultSize(width: 1000, height: 700)
+    }
+    
+    init() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            AppDelegate.shared.showMainWindow()
+        }
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     static let shared = AppDelegate()
-    var window: NSWindow?
+    private var window: NSWindow?
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
     }
     
-    func showWindow() {
-        if let w = window, !w.isReleasedWhenClosed {
+    func showMainWindow() {
+        if let w = window, w.isVisible {
             w.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
-        } else {
-            NSApp.sendAction(Selector(("showWindows")), to: nil, from: nil)
-            NSApp.activate(ignoringOtherApps: true)
+            return
         }
-    }
-}
-
-struct CaptureWindow: NSViewRepresentable {
-    func makeNSView(context: Context) -> NSView {
-        let view = CapturingView()
-        DispatchQueue.main.async {
-            AppDelegate.shared.window = view.window
-            view.window?.delegate = context.coordinator
-        }
-        return view
-    }
-    
-    func updateNSView(_ nsView: NSView, context: Context) {}
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator()
+        
+        let contentView = ContentView()
+        let newWindow = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 1000, height: 700),
+            styleMask: [.titled, .closable, .miniaturizable, .resizable],
+            backing: .buffered,
+            defer: false
+        )
+        newWindow.title = "TeamSight Tracker"
+        newWindow.contentView = NSHostingView(rootView: contentView)
+        newWindow.center()
+        newWindow.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+        self.window = newWindow
     }
     
-    class Coordinator: NSObject, NSWindowDelegate {
-        func windowShouldClose(_ sender: NSWindow) -> Bool {
-            sender.orderOut(nil)
-            return false
-        }
-    }
-}
-
-class CapturingView: NSView {
-    override func viewDidMoveToWindow() {
-        super.viewDidMoveToWindow()
-        if let window = self.window {
-            AppDelegate.shared.window = window
-        }
+    func hideMainWindow() {
+        window?.orderOut(nil)
     }
 }
