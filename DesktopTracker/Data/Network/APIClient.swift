@@ -18,6 +18,7 @@ class APIClient {
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
         
         if let memberId = memberId {
             request.setValue(memberId, forHTTPHeaderField: "X-Trello-Member-Id")
@@ -54,6 +55,7 @@ class APIClient {
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
         
         if let memberId = memberId {
             request.setValue(memberId, forHTTPHeaderField: "X-Trello-Member-Id")
