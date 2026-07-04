@@ -208,7 +208,7 @@ struct TimerView: View {
         let repository = TimeTrackerRepositoryImpl()
         do {
             let memberId = UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
-            let records = try await repository.getRecords(memberId: memberId)
+            let (records, _) = try await repository.getRecords(memberId: memberId, limit: 50, offset: 0)
             let cardIds = Array(Set(records.map { $0.trelloCardId }))
             if !cardIds.isEmpty {
                 let names = try await repository.getCardNames(cardIds: cardIds)
