@@ -28,8 +28,8 @@ class DashboardViewModel {
             let data = try await dashboardTask
             dashboardData = data
             
-            if let records = data.recentRecords, !records.isEmpty {
-                let cardIds = Array(Set(records.map { $0.trelloCardId }))
+            if !data.recentRecords.isEmpty {
+                let cardIds = Array(Set(data.recentRecords.map { $0.trelloCardId }))
                 if !cardIds.isEmpty {
                     async let namesTask = repository.getCardNames(cardIds: cardIds)
                     cardNames = try await namesTask
