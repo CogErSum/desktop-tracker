@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func showMainWindow() {
-        if let w = window, w.isVisible {
+        if let w = window {
             w.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
             return
@@ -45,6 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
         newWindow.title = "TeamSight Tracker"
         newWindow.contentView = NSHostingView(rootView: contentView)
+        newWindow.isReleasedWhenClosed = false
         newWindow.center()
         newWindow.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
