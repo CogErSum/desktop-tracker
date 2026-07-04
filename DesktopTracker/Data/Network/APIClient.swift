@@ -15,9 +15,10 @@ class APIClient {
     
     func request<T: Decodable>(_ endpoint: Endpoint, memberId: String? = nil) async throws -> T {
         let url = try endpoint.url(baseURL: baseURL)
+        print("[API] GET \(url.absoluteString)")
+        
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
         if let memberId = memberId {
@@ -34,18 +35,25 @@ class APIClient {
             throw APIError.invalidResponse
         }
         
+        print("[API] Status: \(httpResponse.statusCode)")
+        
         if httpResponse.statusCode == 409 {
             let conflict = try? JSONDecoder().decode(TimerConflict.self, from: data)
             throw APIError.conflict(conflict)
         }
         
         guard (200...299).contains(httpResponse.statusCode) else {
-            throw APIError.serverError(httpResponse.statusCode, String(data: data, encoding: .utf8))
+            let bodyStr = String(data: data, encoding: .utf8) ?? "unknown"
+            print("[API] Error body: \(bodyStr.prefix(200))")
+            throw APIError.serverError(httpResponse.statusCode, bodyStr)
         }
         
         do {
-            return try JSONDecoder().decode(T.self, from: data)
+            let decoded = try JSONDecoder().decode(T.self, from: data)
+            return decoded
         } catch {
+            let bodyStr = String(data: data, encoding: .utf8) ?? "unknown"
+            print("[API] Decode error. Response: \(bodyStr.prefix(300))")
             throw APIError.decodingError(error)
         }
     }
@@ -54,7 +62,6 @@ class APIClient {
         let url = try endpoint.url(baseURL: baseURL)
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
         if let memberId = memberId {
