@@ -62,15 +62,7 @@ struct MenuBarView: View {
         Divider()
         
         Button("Open Dashboard") {
-            for window in NSApp.windows {
-                if window.title == "TeamSight Tracker" {
-                    window.makeKeyAndOrderFront(nil)
-                    NSApp.activate(ignoringOtherApps: true)
-                    return
-                }
-            }
-            NSApp.sendAction(Selector(("showWindows")), to: nil, from: nil)
-            NSApp.activate(ignoringOtherApps: true)
+            AppDelegate.shared.showWindow()
         }
         .keyboardShortcut("d")
         
