@@ -216,7 +216,7 @@ struct TimerView: View {
     }
 }
 
-struct Board: Identifiable, Codable {
+struct Board: Identifiable, Codable, Hashable {
     let id: String
     let name: String
 }
