@@ -1,10 +1,11 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 @Observable
 class TimerViewModel {
     private let repository: TimeTrackerRepository
-    private let memberId: String
+    private var memberId: String
     
     var activeTimer: ActiveTimer?
     var elapsed: Int = 0
@@ -14,9 +15,9 @@ class TimerViewModel {
     
     private var timer: Timer?
     
-    init(repository: TimeTrackerRepository = TimeTrackerRepositoryImpl(), memberId: String = "test-user-1") {
+    init(repository: TimeTrackerRepository = TimeTrackerRepositoryImpl(), memberId: String? = nil) {
         self.repository = repository
-        self.memberId = memberId
+        self.memberId = memberId ?? UserDefaults.standard.string(forKey: "memberId") ?? "test-user-1"
     }
     
     func checkActiveTimer() async {

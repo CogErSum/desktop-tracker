@@ -3,12 +3,14 @@ import Foundation
 class APIClient {
     static let shared = APIClient()
     
-    private let baseURL: String
     private let session: URLSession
     
     private init() {
-        self.baseURL = UserDefaults.standard.string(forKey: "apiBaseURL") ?? "http://localhost:8000"
         self.session = URLSession.shared
+    }
+    
+    private var baseURL: String {
+        UserDefaults.standard.string(forKey: "apiBaseURL") ?? "http://localhost:8000"
     }
     
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
@@ -24,7 +26,7 @@ class APIClient {
         let (data, response) = try await session.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw APIError.invalidURL
+            throw APIError.invalidResponse
         }
         
         if httpResponse.statusCode == 409 {
@@ -41,6 +43,25 @@ class APIClient {
         } catch {
             throw APIError.decodingError(error)
         }
+    }
+    
+    func requestData(_ endpoint: Endpoint) async throws -> Data {
+        let url = try endpoint.url(baseURL: baseURL)
+        var request = URLRequest(url: url)
+        request.httpMethod = endpoint.method
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.serverError(httpResponse.statusCode, String(data: data, encoding: .utf8))
+        }
+        
+        return data
     }
 }
 

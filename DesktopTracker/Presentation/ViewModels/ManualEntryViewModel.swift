@@ -1,10 +1,11 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 @Observable
 class ManualEntryViewModel {
     private let repository: TimeTrackerRepository
-    private let memberId: String
+    private var memberId: String
     
     var cardId = ""
     var durationHours = 0
@@ -15,9 +16,9 @@ class ManualEntryViewModel {
     var error: String?
     var success = false
     
-    init(repository: TimeTrackerRepository = TimeTrackerRepositoryImpl(), memberId: String = "test-user-1") {
+    init(repository: TimeTrackerRepository = TimeTrackerRepositoryImpl(), memberId: String? = nil) {
         self.repository = repository
-        self.memberId = memberId
+        self.memberId = memberId ?? UserDefaults.standard.string(forKey: "memberId") ?? "test-user-1"
     }
     
     func submit() async {

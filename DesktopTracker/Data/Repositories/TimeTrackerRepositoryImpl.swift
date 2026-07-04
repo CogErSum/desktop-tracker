@@ -83,14 +83,10 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
     }
     
     func exportCSV(memberId: String) async throws -> Data {
-        let url = try URL(string: "http://localhost:8000/api/export/\(memberId)/csv")!
-        let (data, _) = try await URLSession.shared.data(from: url)
-        return data
+        return try await apiClient.requestData(ExportEndpoint.csv(memberId: memberId))
     }
     
     func exportJSON(memberId: String) async throws -> Data {
-        let url = try URL(string: "http://localhost:8000/api/export/\(memberId)/json")!
-        let (data, _) = try await URLSession.shared.data(from: url)
-        return data
+        return try await apiClient.requestData(ExportEndpoint.json(memberId: memberId))
     }
 }
