@@ -26,14 +26,15 @@ class DashboardViewModel {
         do {
             dashboardData = try await repository.getDashboard(memberId: memberId)
             
-            if let records = dashboardData?.recentRecords {
+            if let records = dashboardData?.recentRecords, !records.isEmpty {
                 let cardIds = Array(Set(records.map { $0.trelloCardId }))
                 if !cardIds.isEmpty {
                     cardNames = try await repository.getCardNames(cardIds: cardIds)
                 }
             }
         } catch {
-            self.error = "Failed to load dashboard"
+            print("Dashboard load error: \(error)")
+            self.error = "Failed to load dashboard: \(error.localizedDescription)"
         }
         
         loading = false

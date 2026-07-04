@@ -30,7 +30,8 @@ class RecordsViewModel {
                 cardNames = try await repository.getCardNames(cardIds: cardIds)
             }
         } catch {
-            self.error = "Failed to load records"
+            print("Records load error: \(error)")
+            self.error = "Failed to load records: \(error.localizedDescription)"
         }
         
         loading = false
