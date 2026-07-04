@@ -10,14 +10,18 @@ class APIClient {
     }
     
     private var baseURL: String {
-        UserDefaults.standard.string(forKey: "apiBaseURL") ?? "http://localhost:8000"
+        UserDefaults.standard.string(forKey: "apiBaseURL") ?? "https://timetracker.karkach.tech"
     }
     
-    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
+    func request<T: Decodable>(_ endpoint: Endpoint, memberId: String? = nil) async throws -> T {
         let url = try endpoint.url(baseURL: baseURL)
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if let memberId = memberId {
+            request.setValue(memberId, forHTTPHeaderField: "X-Trello-Member-Id")
+        }
         
         if let body = endpoint.body {
             request.httpBody = try JSONSerialization.data(withJSONObject: body)
@@ -45,11 +49,15 @@ class APIClient {
         }
     }
     
-    func requestData(_ endpoint: Endpoint) async throws -> Data {
+    func requestData(_ endpoint: Endpoint, memberId: String? = nil) async throws -> Data {
         let url = try endpoint.url(baseURL: baseURL)
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if let memberId = memberId {
+            request.setValue(memberId, forHTTPHeaderField: "X-Trello-Member-Id")
+        }
         
         let (data, response) = try await session.data(for: request)
         

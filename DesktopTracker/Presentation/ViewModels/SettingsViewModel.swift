@@ -8,8 +8,8 @@ class SettingsViewModel {
     var showMenuBarIcon: Bool
     
     init() {
-        self.apiBaseURL = UserDefaults.standard.string(forKey: "apiBaseURL") ?? "http://localhost:8000"
-        self.memberId = UserDefaults.standard.string(forKey: "memberId") ?? "test-user-1"
+        self.apiBaseURL = UserDefaults.standard.string(forKey: "apiBaseURL") ?? "https://timetracker.karkach.tech"
+        self.memberId = UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
         self.showMenuBarIcon = UserDefaults.standard.bool(forKey: "showMenuBarIcon")
     }
     

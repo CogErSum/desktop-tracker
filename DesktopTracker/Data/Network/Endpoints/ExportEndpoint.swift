@@ -1,15 +1,15 @@
 import Foundation
 
 enum ExportEndpoint: Endpoint {
-    case csv(memberId: String)
-    case json(memberId: String)
+    case csv
+    case json
     
     var path: String {
         switch self {
-        case .csv(let memberId):
-            return "/api/export/\(memberId)/csv"
-        case .json(let memberId):
-            return "/api/export/\(memberId)/json"
+        case .csv:
+            return "/api/v1/export?format=csv"
+        case .json:
+            return "/api/v1/export?format=xlsx"
         }
     }
     

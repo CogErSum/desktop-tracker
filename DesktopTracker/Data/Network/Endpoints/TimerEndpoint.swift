@@ -1,18 +1,18 @@
 import Foundation
 
 enum TimerEndpoint: Endpoint {
-    case getActive(memberId: String)
-    case start(memberId: String, cardId: String)
-    case stop(memberId: String)
+    case getActive
+    case start(cardId: String)
+    case stop
     
     var path: String {
         switch self {
-        case .getActive(let memberId):
-            return "/api/timers/\(memberId)/active"
-        case .start(let memberId, _):
-            return "/api/timers/\(memberId)/start"
-        case .stop(let memberId):
-            return "/api/timers/\(memberId)/stop"
+        case .getActive:
+            return "/api/v1/timers/active"
+        case .start:
+            return "/api/v1/timers/start"
+        case .stop:
+            return "/api/v1/timers/stop"
         }
     }
     
@@ -27,11 +27,9 @@ enum TimerEndpoint: Endpoint {
     
     var body: [String: Any]? {
         switch self {
-        case .start(_, let cardId):
-            return ["trello_card_id": cardId]
-        case .stop:
-            return nil
-        case .getActive:
+        case .start(let cardId):
+            return ["card_id": cardId]
+        case .stop, .getActive:
             return nil
         }
     }

@@ -1,21 +1,21 @@
 import Foundation
 
 enum RecordsEndpoint: Endpoint {
-    case list(memberId: String)
-    case create(memberId: String, cardId: String, duration: Int, comment: String?, date: String?)
-    case update(id: String, duration: Int?, comment: String?)
+    case list
+    case create(cardId: String, durationMin: Int, date: String, comment: String?)
+    case update(id: String, durationMin: Int?, date: String?, comment: String?)
     case delete(id: String)
     
     var path: String {
         switch self {
-        case .list(let memberId):
-            return "/api/records/\(memberId)"
-        case .create(let memberId, _, _, _, _):
-            return "/api/records/\(memberId)"
-        case .update(let id, _, _):
-            return "/api/records/\(id)"
+        case .list:
+            return "/api/v1/records"
+        case .create:
+            return "/api/v1/records"
+        case .update(let id, _, _, _):
+            return "/api/v1/records/\(id)"
         case .delete(let id):
-            return "/api/records/\(id)"
+            return "/api/v1/records/\(id)"
         }
     }
     
@@ -26,7 +26,7 @@ enum RecordsEndpoint: Endpoint {
         case .create:
             return "POST"
         case .update:
-            return "PUT"
+            return "PATCH"
         case .delete:
             return "DELETE"
         }
@@ -34,17 +34,18 @@ enum RecordsEndpoint: Endpoint {
     
     var body: [String: Any]? {
         switch self {
-        case .create(_, let cardId, let duration, let comment, let date):
+        case .create(let cardId, let durationMin, let date, let comment):
             var dict: [String: Any] = [
-                "trello_card_id": cardId,
-                "duration_sec": duration
+                "card_id": cardId,
+                "duration_min": durationMin,
+                "date": date
             ]
             if let comment = comment { dict["comment"] = comment }
-            if let date = date { dict["record_date"] = date }
             return dict
-        case .update(_, let duration, let comment):
+        case .update(_, let durationMin, let date, let comment):
             var dict: [String: Any] = [:]
-            if let duration = duration { dict["duration_sec"] = duration }
+            if let durationMin = durationMin { dict["duration_min"] = durationMin }
+            if let date = date { dict["record_date"] = date }
             if let comment = comment { dict["comment"] = comment }
             return dict
         case .delete, .list:

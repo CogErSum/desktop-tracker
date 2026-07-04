@@ -6,21 +6,13 @@ enum BoardsEndpoint: Endpoint {
     
     var path: String {
         switch self {
-        case .cardNames:
-            return "/api/boards/card-names"
+        case .cardNames(let cardIds):
+            return "/api/v1/boards/cards?card_ids=\(cardIds.joined(separator: ","))"
         case .cardInfo(let cardId):
-            return "/api/boards/card/\(cardId)/info"
+            return "/api/v1/boards/card-info?card_id=\(cardId)"
         }
     }
     
     var method: String { "GET" }
-    
-    var body: [String: Any]? {
-        switch self {
-        case .cardNames(let cardIds):
-            return ["card_ids": cardIds]
-        case .cardInfo:
-            return nil
-        }
-    }
+    var body: [String: Any]? { nil }
 }
