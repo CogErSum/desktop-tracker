@@ -25,4 +25,3 @@ struct TimeRecord: Identifiable, Codable, Hashable {
         lhs.id == rhs.id
     }
 }
-}
