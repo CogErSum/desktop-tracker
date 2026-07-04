@@ -16,6 +16,7 @@ struct RecordsView: View {
                 Button("Refresh") {
                     Task { await viewModel.loadRecords() }
                 }
+                .tint(Color.tmst.accent)
             }
             .padding()
             
@@ -23,7 +24,7 @@ struct RecordsView: View {
                 ProgressView()
             } else if let error = viewModel.error {
                 Text(error)
-                    .foregroundColor(.red)
+                    .foregroundColor(Color.tmst.error)
             } else {
                 List(viewModel.filteredRecords(), selection: $selectedRecord) { record in
                     RecordRow(

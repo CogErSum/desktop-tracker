@@ -57,3 +57,8 @@ struct SearchResult: Identifiable, Codable {
         case boardName = "board_name"
     }
 }
+
+struct BoardCard: Identifiable, Codable {
+    let id: String
+    let name: String
+}

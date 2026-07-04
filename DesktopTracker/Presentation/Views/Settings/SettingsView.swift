@@ -20,7 +20,7 @@ struct SettingsView: View {
             
             if saved {
                 Text("Settings saved!")
-                    .foregroundColor(.green)
+                    .foregroundColor(Color.tmst.accent)
             }
             
             HStack {
@@ -33,14 +33,11 @@ struct SettingsView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
+                .tint(Color.tmst.accent)
             }
         }
         .padding()
         .frame(minWidth: 400, minHeight: 250)
         .navigationTitle("Settings")
     }
-}
-
-#Preview {
-    SettingsView()
 }

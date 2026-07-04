@@ -17,11 +17,12 @@ struct DashboardView: View {
                     )
                 } else if let error = viewModel.error {
                     Text(error)
-                        .foregroundColor(.red)
+                        .foregroundColor(Color.tmst.error)
                 }
             }
             .padding()
         }
+        .navigationTitle("Dashboard")
         .task {
             await viewModel.loadDashboard()
         }

@@ -1,16 +1,22 @@
 import Foundation
 
 enum BoardsEndpoint: Endpoint {
+    case list
     case cardNames(cardIds: [String])
     case cardInfo(cardId: String)
+    case boardCards(boardId: String)
     case search(query: String)
     
     var path: String {
         switch self {
+        case .list:
+            return "/api/v1/boards"
         case .cardNames(let cardIds):
             return "/api/v1/boards/cards?card_ids=\(cardIds.joined(separator: ","))"
         case .cardInfo(let cardId):
             return "/api/v1/boards/card-info?card_id=\(cardId)"
+        case .boardCards(let boardId):
+            return "/api/v1/boards/board-cards?board_id=\(boardId)"
         case .search(let query):
             return "/api/v1/boards/search?q=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
         }

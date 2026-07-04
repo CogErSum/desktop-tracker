@@ -7,6 +7,7 @@ struct ManualEntryView: View {
     var body: some View {
         Form {
             TextField("Card ID", text: $viewModel.cardId)
+                .textFieldStyle(.roundedBorder)
             
             HStack {
                 Picker("Hours", selection: $viewModel.durationHours) {
@@ -27,15 +28,16 @@ struct ManualEntryView: View {
             DatePicker("Date", selection: $viewModel.recordDate, displayedComponents: .date)
             
             TextField("Comment (optional)", text: $viewModel.comment)
+                .textFieldStyle(.roundedBorder)
             
             if let error = viewModel.error {
                 Text(error)
-                    .foregroundColor(.red)
+                    .foregroundColor(Color.tmst.error)
             }
             
             if viewModel.success {
                 Text("Record created!")
-                    .foregroundColor(.green)
+                    .foregroundColor(Color.tmst.accent)
             }
             
             HStack {
@@ -50,6 +52,7 @@ struct ManualEntryView: View {
                 }
                 .disabled(viewModel.loading)
                 .buttonStyle(.borderedProminent)
+                .tint(Color.tmst.accent)
             }
         }
         .padding()

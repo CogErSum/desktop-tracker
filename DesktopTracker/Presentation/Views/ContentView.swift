@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab: String = "dashboard"
-    @State private var showingStartTimer = false
     
     var body: some View {
         NavigationSplitView {

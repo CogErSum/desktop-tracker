@@ -78,6 +78,14 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
         return try await apiClient.request(BoardsEndpoint.search(query: query), memberId: memberId)
     }
     
+    func getBoardCards(boardId: String) async throws -> [BoardCard] {
+        return try await apiClient.request(BoardsEndpoint.boardCards(boardId: boardId))
+    }
+    
+    func getBoards(memberId: String) async throws -> [Board] {
+        return try await apiClient.request(BoardsEndpoint.list, memberId: memberId)
+    }
+    
     func getEstimate(cardId: String) async throws -> Int? {
         let response: EstimateResponse = try await apiClient.request(EstimatesEndpoint.get(cardId: cardId))
         return response.estimatedMin

@@ -2,10 +2,12 @@ import SwiftUI
 
 struct TimerView: View {
     @State private var viewModel = TimerViewModel()
-    @State private var searchText = ""
-    @State private var searchResults: [SearchResult] = []
-    @State private var selectedCard: SearchResult?
-    @State private var searching = false
+    @State private var boards: [Board] = []
+    @State private var selectedBoard: Board?
+    @State private var cards: [BoardCard] = []
+    @State private var selectedCard: BoardCard?
+    @State private var loadingBoards = false
+    @State private var loadingCards = false
     
     let cardId: String
     
@@ -22,7 +24,7 @@ struct TimerView: View {
                 
                 if let error = viewModel.error {
                     Text(error)
-                        .foregroundColor(.red)
+                        .foregroundColor(Color.tmst.error)
                         .font(.caption)
                 }
             }
@@ -31,6 +33,7 @@ struct TimerView: View {
         .navigationTitle("Timer")
         .task {
             await viewModel.checkActiveTimer()
+            await loadBoards()
         }
     }
     
@@ -38,92 +41,97 @@ struct TimerView: View {
         VStack(spacing: 16) {
             Text("Start Timer")
                 .font(.title2)
-                .fontWeight(.bold)
+                .fontWeight(.semibold)
+                .foregroundColor(Color.tmst.textPrimary)
             
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Search for a Trello card:")
-                    .foregroundColor(.secondary)
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Select Board")
+                    .font(.headline)
+                    .foregroundColor(Color.tmst.textSecondary)
                 
-                TextField("Type card name...", text: $searchText)
-                    .textFieldStyle(.roundedBorder)
-                    .onChange(of: searchText) { _, newValue in
-                        debounceSearch(query: newValue)
-                    }
-                
-                if searching {
+                if loadingBoards {
                     ProgressView()
-                        .scaleEffect(0.8)
                         .frame(maxWidth: .infinity)
-                }
-                
-                if !searchResults.isEmpty {
-                    ScrollView {
-                        LazyVStack(spacing: 0) {
-                            ForEach(searchResults) { card in
-                                Button {
-                                    selectedCard = card
-                                    searchText = card.name
-                                    searchResults = []
-                                } label: {
-                                    HStack {
-                                        VStack(alignment: .leading, spacing: 2) {
-                                            Text(card.name)
-                                                .font(.body)
-                                                .foregroundColor(.primary)
-                                                .lineLimit(2)
-                                            if !card.boardName.isEmpty {
-                                                Text(card.boardName)
-                                                    .font(.caption)
-                                                    .foregroundColor(.secondary)
-                                            }
-                                        }
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                            .foregroundColor(.secondary)
-                                    }
-                                    .padding(.vertical, 8)
-                                    .padding(.horizontal, 4)
-                                }
-                                .buttonStyle(.plain)
-                                Divider()
-                            }
+                } else {
+                    Picker("Board", selection: $selectedBoard) {
+                        Text("Choose board...").tag(nil as Board?)
+                        ForEach(boards) { board in
+                            Text(board.name).tag(board as Board?)
                         }
                     }
-                    .frame(maxHeight: 200)
-                }
-            }
-            
-            if let selected = selectedCard {
-                HStack {
-                    Text("Selected:")
-                        .foregroundColor(.secondary)
-                    Text(selected.name)
-                        .fontWeight(.medium)
-                    Spacer()
-                    Button("Clear") {
-                        selectedCard = nil
-                        searchText = ""
+                    .pickerStyle(.menu)
+                    .onChange(of: selectedBoard) { _, newBoard in
+                        if let board = newBoard {
+                            Task { await loadCards(boardId: board.id) }
+                        } else {
+                            cards = []
+                            selectedCard = nil
+                        }
                     }
-                    .buttonStyle(.plain)
-                    .foregroundColor(.red)
                 }
-                .padding()
-                .background(Color(nsColor: .controlBackgroundColor))
-                .cornerRadius(8)
+                
+                if selectedBoard != nil {
+                    Divider()
+                    
+                    Text("Select Card")
+                        .font(.headline)
+                        .foregroundColor(Color.tmst.textSecondary)
+                    
+                    if loadingCards {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                    } else if cards.isEmpty {
+                        Text("No cards in this board")
+                            .foregroundColor(Color.tmst.textSecondary)
+                    } else {
+                        ScrollView {
+                            LazyVStack(spacing: 0) {
+                                ForEach(cards) { card in
+                                    Button {
+                                        selectedCard = card
+                                    } label: {
+                                        HStack {
+                                            Text(card.name)
+                                                .font(.body)
+                                                .foregroundColor(selectedCard?.id == card.id ? Color.white : Color.tmst.textPrimary)
+                                                .lineLimit(2)
+                                            Spacer()
+                                            if selectedCard?.id == card.id {
+                                                Image(systemName: "checkmark.circle.fill")
+                                                    .foregroundColor(Color.white)
+                                            }
+                                        }
+                                        .padding(.vertical, 10)
+                                        .padding(.horizontal, 12)
+                                        .background(
+                                            selectedCard?.id == card.id
+                                                ? Color.tmst.accent
+                                                : Color.clear
+                                        )
+                                        .cornerRadius(8)
+                                    }
+                                    .buttonStyle(.plain)
+                                    Divider()
+                                }
+                            }
+                        }
+                        .frame(maxHeight: 250)
+                        .background(Color.tmst.surface)
+                        .cornerRadius(8)
+                    }
+                }
             }
             
             Button("Start Timer") {
                 Task {
                     if let card = selectedCard {
                         await viewModel.startTimer(cardId: card.id)
-                    } else if !searchText.isEmpty {
-                        await viewModel.startTimer(cardId: searchText)
                     }
                 }
             }
-            .disabled((selectedCard == nil && searchText.isEmpty) || viewModel.loading)
+            .disabled(selectedCard == nil || viewModel.loading)
             .buttonStyle(.borderedProminent)
-            .tint(.green)
+            .tint(Color.tmst.accent)
         }
     }
     
@@ -132,16 +140,16 @@ struct TimerView: View {
             HStack {
                 Image(systemName: "timer")
                     .font(.largeTitle)
-                    .foregroundColor(.green)
+                    .foregroundColor(Color.tmst.accent)
                 
                 VStack(alignment: .leading) {
                     Text(viewModel.formattedTime(viewModel.elapsed))
                         .font(.system(.title, design: .monospaced))
-                        .foregroundColor(.green)
+                        .foregroundColor(Color.tmst.accent)
                     
                     Text("Timer is running")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color.tmst.textSecondary)
                 }
             }
             
@@ -150,7 +158,7 @@ struct TimerView: View {
             }
             .disabled(viewModel.loading)
             .buttonStyle(.borderedProminent)
-            .tint(.red)
+            .tint(Color.tmst.error)
         }
     }
     
@@ -159,14 +167,15 @@ struct TimerView: View {
             HStack {
                 Image(systemName: "exclamationmark.triangle")
                     .font(.largeTitle)
-                    .foregroundColor(.orange)
+                    .foregroundColor(Color.tmst.warning)
                 
                 VStack(alignment: .leading) {
                     Text(conflict.activeCardName)
                         .font(.headline)
+                        .foregroundColor(Color.tmst.textPrimary)
                     Text(conflict.activeBoardName)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color.tmst.textSecondary)
                 }
             }
             
@@ -177,31 +186,37 @@ struct TimerView: View {
             }
             .disabled(viewModel.loading || selectedCard == nil)
             .buttonStyle(.borderedProminent)
-            .tint(.orange)
+            .tint(Color.tmst.warning)
         }
     }
     
-    private func debounceSearch(query: String) {
-        guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            searchResults = []
-            return
-        }
-        
-        Task {
-            try? await Task.sleep(for: .milliseconds(300))
-            await searchCards(query: query)
-        }
-    }
-    
-    private func searchCards(query: String) async {
-        searching = true
+    private func loadBoards() async {
+        loadingBoards = true
         let repository = TimeTrackerRepositoryImpl()
         do {
-            searchResults = try await repository.searchCards(query: query)
+            let memberId = UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
+            boards = try await repository.getBoards(memberId: memberId)
         } catch {
-            print("Search error: \(error)")
-            searchResults = []
+            print("Failed to load boards: \(error)")
         }
-        searching = false
+        loadingBoards = false
     }
+    
+    private func loadCards(boardId: String) async {
+        loadingCards = true
+        selectedCard = nil
+        let repository = TimeTrackerRepositoryImpl()
+        do {
+            cards = try await repository.getBoardCards(boardId: boardId)
+        } catch {
+            print("Failed to load cards: \(error)")
+            cards = []
+        }
+        loadingCards = false
+    }
+}
+
+struct Board: Identifiable, Codable {
+    let id: String
+    let name: String
 }

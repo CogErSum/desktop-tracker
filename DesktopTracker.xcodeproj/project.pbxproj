@@ -48,6 +48,7 @@
 		A1000039 /* EstimatesEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000040 /* EstimatesEndpoint.swift */; };
 		A1000040 /* StartTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000041 /* StartTimerView.swift */; };
 		A1000041 /* StartTimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000042 /* StartTimerViewModel.swift */; };
+		A1000042 /* TMSTTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000043 /* TMSTTheme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +94,7 @@
 		A2000040 /* EstimatesEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstimatesEndpoint.swift; sourceTree = "<group>"; };
 		A2000041 /* StartTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTimerView.swift; sourceTree = "<group>"; };
 		A2000042 /* StartTimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTimerViewModel.swift; sourceTree = "<group>"; };
+		A2000043 /* TMSTTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMSTTheme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				A2000003 /* Assets.xcassets */,
+				A2000043 /* TMSTTheme.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 				A1000039 /* EstimatesEndpoint.swift in Sources */,
 				A1000040 /* StartTimerView.swift in Sources */,
 				A1000041 /* StartTimerViewModel.swift in Sources */,
+				A1000042 /* TMSTTheme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

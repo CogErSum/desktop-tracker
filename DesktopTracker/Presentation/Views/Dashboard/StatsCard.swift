@@ -5,17 +5,22 @@ struct StatsCard: View {
     let value: String
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(.headline)
-                .foregroundColor(.secondary)
+                .font(.subheadline)
+                .foregroundColor(Color.tmst.textSecondary)
             Text(value)
-                .font(.title)
-                .fontWeight(.bold)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(Color.tmst.textPrimary)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
-        .cornerRadius(10)
+        .background(Color.tmst.surface)
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.tmst.stroke, lineWidth: 1)
+        )
     }
 }
