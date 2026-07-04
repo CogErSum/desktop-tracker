@@ -16,7 +16,7 @@ class DashboardViewModel {
     
     init(repository: TimeTrackerRepository = TimeTrackerRepositoryImpl(), memberId: String? = nil) {
         self.repository = repository
-        self.memberId = memberId ?? UserDefaults.standard.string(forKey: "memberId") ?? "test-user-1"
+        self.memberId = memberId ?? UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
     }
     
     func loadDashboard() async {
@@ -24,17 +24,20 @@ class DashboardViewModel {
         error = nil
         
         do {
-            dashboardData = try await repository.getDashboard(memberId: memberId)
+            async let dashboardTask = repository.getDashboard(memberId: memberId)
+            let data = try await dashboardTask
+            dashboardData = data
             
-            if let records = dashboardData?.recentRecords, !records.isEmpty {
+            if let records = data.recentRecords, !records.isEmpty {
                 let cardIds = Array(Set(records.map { $0.trelloCardId }))
                 if !cardIds.isEmpty {
-                    cardNames = try await repository.getCardNames(cardIds: cardIds)
+                    async let namesTask = repository.getCardNames(cardIds: cardIds)
+                    cardNames = try await namesTask
                 }
             }
         } catch {
             print("Dashboard load error: \(error)")
-            self.error = "Failed to load dashboard: \(error.localizedDescription)"
+            self.error = "Failed to load dashboard"
         }
         
         loading = false

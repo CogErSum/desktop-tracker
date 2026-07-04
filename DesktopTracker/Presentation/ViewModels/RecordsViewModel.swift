@@ -16,7 +16,7 @@ class RecordsViewModel {
     
     init(repository: TimeTrackerRepository = TimeTrackerRepositoryImpl(), memberId: String? = nil) {
         self.repository = repository
-        self.memberId = memberId ?? UserDefaults.standard.string(forKey: "memberId") ?? "test-user-1"
+        self.memberId = memberId ?? UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
     }
     
     func loadRecords() async {
@@ -24,14 +24,16 @@ class RecordsViewModel {
         error = nil
         
         do {
-            records = try await repository.getRecords(memberId: memberId)
-            let cardIds = Array(Set(records.map { $0.trelloCardId }))
+            let fetchedRecords = try await repository.getRecords(memberId: memberId)
+            records = fetchedRecords
+            
+            let cardIds = Array(Set(fetchedRecords.map { $0.trelloCardId }))
             if !cardIds.isEmpty {
                 cardNames = try await repository.getCardNames(cardIds: cardIds)
             }
         } catch {
             print("Records load error: \(error)")
-            self.error = "Failed to load records: \(error.localizedDescription)"
+            self.error = "Failed to load records"
         }
         
         loading = false

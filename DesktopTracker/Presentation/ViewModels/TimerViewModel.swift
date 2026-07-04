@@ -12,12 +12,13 @@ class TimerViewModel {
     var loading = false
     var error: String?
     var conflictInfo: TimerConflict?
+    var activeCardName: String = ""
     
     private var timer: Timer?
     
     init(repository: TimeTrackerRepository = TimeTrackerRepositoryImpl(), memberId: String? = nil) {
         self.repository = repository
-        self.memberId = memberId ?? UserDefaults.standard.string(forKey: "memberId") ?? "test-user-1"
+        self.memberId = memberId ?? UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
     }
     
     func checkActiveTimer() async {
@@ -26,12 +27,15 @@ class TimerViewModel {
             if let timer = timer {
                 activeTimer = timer
                 startElapsedTimer()
+                await fetchCardName(cardId: timer.trelloCardId)
             } else {
                 activeTimer = nil
                 stopElapsedTimer()
+                activeCardName = ""
             }
         } catch {
             activeTimer = nil
+            activeCardName = ""
         }
     }
     
@@ -44,6 +48,7 @@ class TimerViewModel {
             let timer = try await repository.startTimer(memberId: memberId, cardId: cardId)
             activeTimer = timer
             startElapsedTimer()
+            await fetchCardName(cardId: cardId)
         } catch APIError.conflict(let conflict) {
             conflictInfo = conflict
         } catch {
@@ -63,6 +68,7 @@ class TimerViewModel {
             activeTimer = nil
             stopElapsedTimer()
             elapsed = 0
+            activeCardName = ""
         } catch {
             self.error = "Failed to stop timer"
         }
@@ -73,6 +79,15 @@ class TimerViewModel {
     func stopAndStart(cardId: String) async {
         await stopTimer()
         await startTimer(cardId: cardId)
+    }
+    
+    private func fetchCardName(cardId: String) async {
+        do {
+            let info = try await repository.getCardInfo(cardId: cardId)
+            activeCardName = info.name
+        } catch {
+            activeCardName = ""
+        }
     }
     
     private func startElapsedTimer() {

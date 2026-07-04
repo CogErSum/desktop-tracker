@@ -49,6 +49,7 @@
 		A1000040 /* StartTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000041 /* StartTimerView.swift */; };
 		A1000041 /* StartTimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000042 /* StartTimerViewModel.swift */; };
 		A1000042 /* TMSTTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000043 /* TMSTTheme.swift */; };
+		A1000043 /* APICache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000044 /* APICache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +96,7 @@
 		A2000041 /* StartTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTimerView.swift; sourceTree = "<group>"; };
 		A2000042 /* StartTimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTimerViewModel.swift; sourceTree = "<group>"; };
 		A2000043 /* TMSTTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMSTTheme.swift; sourceTree = "<group>"; };
+		A2000044 /* APICache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +255,7 @@
 			children = (
 				A2000033 /* APIClient.swift */,
 				A2000034 /* APIError.swift */,
+				A2000044 /* APICache.swift */,
 				A4000018 /* Endpoints */,
 			);
 			path = Network;
@@ -443,6 +446,7 @@
 				A1000040 /* StartTimerView.swift in Sources */,
 				A1000041 /* StartTimerViewModel.swift in Sources */,
 				A1000042 /* TMSTTheme.swift in Sources */,
+				A1000043 /* APICache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

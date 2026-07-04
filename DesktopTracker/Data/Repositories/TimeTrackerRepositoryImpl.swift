@@ -2,6 +2,7 @@ import Foundation
 
 class TimeTrackerRepositoryImpl: TimeTrackerRepository {
     private let apiClient: APIClient
+    private let cache = APICache.shared
     
     init(apiClient: APIClient = .shared) {
         self.apiClient = apiClient
@@ -23,38 +24,62 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
         guard let timer = response["timer"] else {
             throw APIError.decodingError(NSError(domain: "", code: -1))
         }
+        await cache.invalidateAll()
         return timer
     }
     
     func stopTimer(memberId: String) async throws {
-        let _: [String: String] = try await apiClient.request(TimerEndpoint.stop, memberId: memberId)
+        do {
+            let _: [String: String] = try await apiClient.request(TimerEndpoint.stop, memberId: memberId)
+        } catch APIError.serverError(404, _) {
+            // Timer already stopped
+        }
+        await cache.invalidateAll()
     }
     
     func getRecords(memberId: String) async throws -> [TimeRecord] {
-        return try await apiClient.request(RecordsEndpoint.list, memberId: memberId)
+        let key = "records_\(memberId)"
+        if let cached: [TimeRecord] = await cache.get(key) {
+            return cached
+        }
+        let records: [TimeRecord] = try await apiClient.request(RecordsEndpoint.list, memberId: memberId)
+        await cache.set(key, data: records)
+        return records
     }
     
     func createRecord(memberId: String, cardId: String, duration: Int, comment: String?, date: String?) async throws -> TimeRecord {
         let durationMin = duration / 60
-        return try await apiClient.request(
+        let record: TimeRecord = try await apiClient.request(
             RecordsEndpoint.create(cardId: cardId, durationMin: durationMin, date: date ?? "", comment: comment),
             memberId: memberId
         )
+        await cache.invalidateAll()
+        return record
     }
     
     func updateRecord(id: String, duration: Int?, comment: String?) async throws -> TimeRecord {
         let durationMin = duration.map { $0 / 60 }
-        return try await apiClient.request(
+        let record: TimeRecord = try await apiClient.request(
             RecordsEndpoint.update(id: id, durationMin: durationMin, date: nil, comment: comment)
         )
+        await cache.invalidateAll()
+        return record
     }
     
     func deleteRecord(id: String) async throws {
-        let _: [String: String] = try await apiClient.request(RecordsEndpoint.delete(id: id))
+        let memberId = UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
+        let _: [String: String] = try await apiClient.request(RecordsEndpoint.delete(id: id), memberId: memberId)
+        await cache.invalidateAll()
     }
     
     func getDashboard(memberId: String) async throws -> DashboardData {
-        return try await apiClient.request(DashboardEndpoint.get, memberId: memberId)
+        let key = "dashboard_\(memberId)"
+        if let cached: DashboardData = await cache.get(key) {
+            return cached
+        }
+        let data: DashboardData = try await apiClient.request(DashboardEndpoint.get, memberId: memberId)
+        await cache.set(key, data: data)
+        return data
     }
     
     func getDailyStats(memberId: String, startDate: String, endDate: String) async throws -> [DailyStats] {
@@ -66,11 +91,24 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
     }
     
     func getCardNames(cardIds: [String]) async throws -> [String: String] {
-        return try await apiClient.request(BoardsEndpoint.cardNames(cardIds: cardIds))
+        let sorted = cardIds.sorted().joined(separator: ",")
+        let key = "cardNames_\(sorted.hashValue)"
+        if let cached: [String: String] = await cache.get(key) {
+            return cached
+        }
+        let names: [String: String] = try await apiClient.request(BoardsEndpoint.cardNames(cardIds: cardIds))
+        await cache.set(key, data: names)
+        return names
     }
     
     func getCardInfo(cardId: String) async throws -> CardInfo {
-        return try await apiClient.request(BoardsEndpoint.cardInfo(cardId: cardId))
+        let key = "cardInfo_\(cardId)"
+        if let cached: CardInfo = await cache.get(key) {
+            return cached
+        }
+        let info: CardInfo = try await apiClient.request(BoardsEndpoint.cardInfo(cardId: cardId))
+        await cache.set(key, data: info)
+        return info
     }
     
     func searchCards(query: String) async throws -> [SearchResult] {
@@ -83,7 +121,13 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
     }
     
     func getBoards(memberId: String) async throws -> [Board] {
-        return try await apiClient.request(BoardsEndpoint.list, memberId: memberId)
+        let key = "boards_\(memberId)"
+        if let cached: [Board] = await cache.get(key) {
+            return cached
+        }
+        let boards: [Board] = try await apiClient.request(BoardsEndpoint.list, memberId: memberId)
+        await cache.set(key, data: boards)
+        return boards
     }
     
     func getEstimate(cardId: String) async throws -> Int? {
