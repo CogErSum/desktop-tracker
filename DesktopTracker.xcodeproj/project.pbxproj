@@ -46,6 +46,8 @@
 		A1000037 /* ExportEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000038 /* ExportEndpoint.swift */; };
 		A1000038 /* BoardsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000039 /* BoardsEndpoint.swift */; };
 		A1000039 /* EstimatesEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000040 /* EstimatesEndpoint.swift */; };
+		A1000040 /* StartTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000041 /* StartTimerView.swift */; };
+		A1000041 /* StartTimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000042 /* StartTimerViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +91,8 @@
 		A2000038 /* ExportEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportEndpoint.swift; sourceTree = "<group>"; };
 		A2000039 /* BoardsEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsEndpoint.swift; sourceTree = "<group>"; };
 		A2000040 /* EstimatesEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstimatesEndpoint.swift; sourceTree = "<group>"; };
+		A2000041 /* StartTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTimerView.swift; sourceTree = "<group>"; };
+		A2000042 /* StartTimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTimerViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +184,7 @@
 				A2000008 /* RecordsViewModel.swift */,
 				A2000009 /* ManualEntryViewModel.swift */,
 				A2000010 /* SettingsViewModel.swift */,
+				A2000042 /* StartTimerViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -188,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				A2000011 /* TimerView.swift */,
+				A2000041 /* StartTimerView.swift */,
 			);
 			path = Timer;
 			sourceTree = "<group>";
@@ -431,6 +437,8 @@
 				A1000037 /* ExportEndpoint.swift in Sources */,
 				A1000038 /* BoardsEndpoint.swift in Sources */,
 				A1000039 /* EstimatesEndpoint.swift in Sources */,
+				A1000040 /* StartTimerView.swift in Sources */,
+				A1000041 /* StartTimerViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

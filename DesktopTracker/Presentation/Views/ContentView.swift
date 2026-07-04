@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab: String = "dashboard"
+    @State private var showingStartTimer = false
     
     var body: some View {
         NavigationSplitView {
@@ -15,6 +16,12 @@ struct ContentView: View {
                     }
                     NavigationLink(value: "manual") {
                         Label("Manual Entry", systemImage: "plus.circle")
+                    }
+                    
+                    Button {
+                        showingStartTimer = true
+                    } label: {
+                        Label("Start Timer", systemImage: "play.circle")
                     }
                 }
                 
@@ -43,5 +50,8 @@ struct ContentView: View {
             DashboardView()
         }
         .frame(minWidth: 800, minHeight: 600)
+        .sheet(isPresented: $showingStartTimer) {
+            StartTimerView()
+        }
     }
 }

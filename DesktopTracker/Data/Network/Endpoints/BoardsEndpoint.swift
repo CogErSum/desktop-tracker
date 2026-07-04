@@ -3,6 +3,7 @@ import Foundation
 enum BoardsEndpoint: Endpoint {
     case cardNames(cardIds: [String])
     case cardInfo(cardId: String)
+    case search(query: String)
     
     var path: String {
         switch self {
@@ -10,6 +11,8 @@ enum BoardsEndpoint: Endpoint {
             return "/api/v1/boards/cards?card_ids=\(cardIds.joined(separator: ","))"
         case .cardInfo(let cardId):
             return "/api/v1/boards/card-info?card_id=\(cardId)"
+        case .search(let query):
+            return "/api/v1/boards/search?q=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
         }
     }
     

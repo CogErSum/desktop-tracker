@@ -45,3 +45,15 @@ struct EstimateResponse: Codable {
         case estimatedMin = "estimated_min"
     }
 }
+
+struct SearchResult: Identifiable, Codable {
+    let id: String
+    let name: String
+    let boardName: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case boardName = "board_name"
+    }
+}

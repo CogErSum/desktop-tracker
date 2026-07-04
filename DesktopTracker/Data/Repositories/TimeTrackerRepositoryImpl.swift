@@ -73,6 +73,10 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
         return try await apiClient.request(BoardsEndpoint.cardInfo(cardId: cardId))
     }
     
+    func searchCards(query: String) async throws -> [SearchResult] {
+        return try await apiClient.request(BoardsEndpoint.search(query: query))
+    }
+    
     func getEstimate(cardId: String) async throws -> Int? {
         let response: EstimateResponse = try await apiClient.request(EstimatesEndpoint.get(cardId: cardId))
         return response.estimatedMin

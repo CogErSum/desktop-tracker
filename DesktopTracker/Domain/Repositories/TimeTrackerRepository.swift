@@ -16,6 +16,7 @@ protocol TimeTrackerRepository {
     
     func getCardNames(cardIds: [String]) async throws -> [String: String]
     func getCardInfo(cardId: String) async throws -> CardInfo
+    func searchCards(query: String) async throws -> [SearchResult]
     
     func getEstimate(cardId: String) async throws -> Int?
     func setEstimate(cardId: String, minutes: Int) async throws
