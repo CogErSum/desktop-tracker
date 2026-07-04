@@ -4,6 +4,7 @@ struct MenuBarView: View {
     @State private var timerViewModel = TimerViewModel()
     @State private var recentCards: [RecentCard] = []
     @State private var showingPicker = false
+    @State private var tick = false
     
     var body: some View {
         if let timer = timerViewModel.activeTimer {
@@ -14,6 +15,7 @@ struct MenuBarView: View {
                     Text(timerViewModel.formattedTime(timerViewModel.elapsed))
                         .font(.system(.body, design: .monospaced))
                         .foregroundColor(.green)
+                        .id(tick)
                 }
                 
                 if !timerViewModel.activeCardName.isEmpty {
@@ -25,6 +27,10 @@ struct MenuBarView: View {
                 }
             }
             .frame(minWidth: 180)
+            .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
+                tick.toggle()
+                timerViewModel.updateElapsed()
+            }
             
             Divider()
             

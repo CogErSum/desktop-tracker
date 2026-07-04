@@ -109,4 +109,9 @@ class TimerViewModel {
         let s = seconds % 60
         return String(format: "%02d:%02d:%02d", h, m, s)
     }
+    
+    func updateElapsed() {
+        guard let startTime = activeTimer?.startedAt else { return }
+        elapsed = Int(Date().timeIntervalSince(startTime))
+    }
 }
