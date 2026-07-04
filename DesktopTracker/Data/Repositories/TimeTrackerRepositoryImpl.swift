@@ -66,12 +66,7 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
     }
     
     func getCardNames(cardIds: [String]) async throws -> [String: String] {
-        let response: CardNamesResponse = try await apiClient.request(BoardsEndpoint.cardNames(cardIds: cardIds))
-        var result: [String: String] = [:]
-        for card in response.cards {
-            result[card.id] = card.name
-        }
-        return result
+        return try await apiClient.request(BoardsEndpoint.cardNames(cardIds: cardIds))
     }
     
     func getCardInfo(cardId: String) async throws -> CardInfo {

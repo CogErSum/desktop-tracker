@@ -38,15 +38,6 @@ struct WeeklyStats: Identifiable, Codable {
     }
 }
 
-struct CardNamesResponse: Codable {
-    let cards: [CardNameItem]
-}
-
-struct CardNameItem: Codable {
-    let id: String
-    let name: String
-}
-
 struct EstimateResponse: Codable {
     let estimatedMin: Int?
     
