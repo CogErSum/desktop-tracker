@@ -70,8 +70,6 @@ struct MenuBarView: View {
                 NSApp.activate(ignoringOtherApps: true)
             }
         }
-            }
-        }
         .keyboardShortcut("d")
         
         Divider()
