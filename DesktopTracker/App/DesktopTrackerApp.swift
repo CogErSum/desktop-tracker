@@ -2,6 +2,8 @@ import SwiftUI
 
 @main
 struct DesktopTrackerApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
         MenuBarExtra("TeamSight", systemImage: "timer") {
             MenuBarView()
@@ -11,5 +13,12 @@ struct DesktopTrackerApp: App {
             ContentView()
         }
         .defaultSize(width: 1000, height: 700)
+        .handlesExternalEvents(matching: [])
+    }
+}
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        false
     }
 }
