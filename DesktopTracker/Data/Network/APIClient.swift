@@ -49,7 +49,23 @@ class APIClient {
         }
         
         do {
-            let decoded = try JSONDecoder().decode(T.self, from: data)
+            let decoder = JSONDecoder()
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            decoder.dateDecodingStrategy = .custom { decoder in
+                let container = try decoder.singleValueContainer()
+                let dateString = try container.decode(String.self)
+                if let date = formatter.date(from: dateString) {
+                    return date
+                }
+                let fallback = ISO8601DateFormatter()
+                fallback.formatOptions = [.withInternetDateTime]
+                if let date = fallback.date(from: dateString) {
+                    return date
+                }
+                throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot parse date: \(dateString)")
+            }
+            let decoded = try decoder.decode(T.self, from: data)
             return decoded
         } catch {
             let bodyStr = String(data: data, encoding: .utf8) ?? "unknown"
