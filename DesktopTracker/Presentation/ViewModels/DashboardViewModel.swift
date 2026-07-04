@@ -14,33 +14,43 @@ class DashboardViewModel {
     var loading = false
     var error: String?
     
+    private var loadTask: Task<Void, Never>?
+    
     init(repository: TimeTrackerRepository = TimeTrackerRepositoryImpl(), memberId: String? = nil) {
         self.repository = repository
         self.memberId = memberId ?? UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
     }
     
     func loadDashboard() async {
+        loadTask?.cancel()
+        
         loading = true
         error = nil
         
-        do {
-            async let dashboardTask = repository.getDashboard(memberId: memberId)
-            let data = try await dashboardTask
-            dashboardData = data
-            
-            if !data.recentRecords.isEmpty {
-                let cardIds = Array(Set(data.recentRecords.map { $0.trelloCardId }))
-                if !cardIds.isEmpty {
-                    async let namesTask = repository.getCardNames(cardIds: cardIds)
-                    cardNames = try await namesTask
+        loadTask = Task {
+            do {
+                let data = try await repository.getDashboard(memberId: memberId)
+                guard !Task.isCancelled else { return }
+                
+                var names: [String: String] = [:]
+                if !data.recentRecords.isEmpty {
+                    let cardIds = Array(Set(data.recentRecords.map { $0.trelloCardId }))
+                    names = try await repository.getCardNames(cardIds: cardIds)
                 }
+                guard !Task.isCancelled else { return }
+                
+                dashboardData = data
+                cardNames = names
+            } catch {
+                guard !Task.isCancelled else { return }
+                print("Dashboard load error: \(error)")
+                self.error = "Failed to load dashboard"
             }
-        } catch {
-            print("Dashboard load error: \(error)")
-            self.error = "Failed to load dashboard"
+            
+            loading = false
         }
         
-        loading = false
+        await loadTask?.value
     }
     
     func loadDailyStats(startDate: Date, endDate: Date) async {
