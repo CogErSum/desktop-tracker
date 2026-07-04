@@ -74,7 +74,8 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
     }
     
     func searchCards(query: String) async throws -> [SearchResult] {
-        return try await apiClient.request(BoardsEndpoint.search(query: query))
+        let memberId = UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
+        return try await apiClient.request(BoardsEndpoint.search(query: query), memberId: memberId)
     }
     
     func getEstimate(cardId: String) async throws -> Int? {
