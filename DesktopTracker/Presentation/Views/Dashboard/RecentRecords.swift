@@ -15,29 +15,41 @@ struct RecentRecords: View {
                     .foregroundColor(.secondary)
                     .padding()
             } else {
-                Table(records) {
-                    TableColumn("Date") { record in
-                        Text(formatDate(record.recordDate ?? record.createdAt))
-                    }
-                    .width(min: 80, ideal: 100)
-                    
-                    TableColumn("Duration") { record in
-                        Text(formatDuration(record.durationSec))
-                            .fontWeight(.semibold)
-                    }
-                    .width(min: 60, ideal: 80)
-                    
-                    TableColumn("Card") { record in
-                        Text(cardNames[record.trelloCardId] ?? String(record.trelloCardId.prefix(8)))
-                            .foregroundColor(.accentColor)
-                    }
-                    
-                    TableColumn("Note") { record in
-                        Text(record.comment ?? "—")
-                            .foregroundColor(record.comment != nil ? .primary : .secondary)
-                            .italic(record.comment == nil)
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(records) { record in
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(cardNames[record.trelloCardId] ?? String(record.trelloCardId.prefix(8)))
+                                        .font(.body)
+                                        .foregroundColor(.accentColor)
+                                    Text(formatDate(record.recordDate ?? record.createdAt))
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                
+                                Spacer()
+                                
+                                VStack(alignment: .trailing, spacing: 2) {
+                                    Text(formatDuration(record.durationSec))
+                                        .font(.body)
+                                        .fontWeight(.semibold)
+                                    if let comment = record.comment {
+                                        Text(comment)
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                            .lineLimit(1)
+                                    }
+                                }
+                            }
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 4)
+                            
+                            Divider()
+                        }
                     }
                 }
+                .frame(maxHeight: 300)
             }
         }
     }
@@ -49,7 +61,7 @@ struct RecentRecords: View {
             return String(dateString.prefix(10))
         }
         let displayFormatter = DateFormatter()
-        displayFormatter.dateFormat = "dd MMM"
+        displayFormatter.dateFormat = "dd MMM HH:mm"
         return displayFormatter.string(from: date)
     }
 }
