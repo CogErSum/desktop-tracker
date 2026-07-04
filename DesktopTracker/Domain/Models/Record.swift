@@ -1,6 +1,6 @@
 import Foundation
 
-struct TimeRecord: Identifiable, Codable {
+struct TimeRecord: Identifiable, Codable, Hashable {
     let id: String
     let trelloCardId: String
     let durationSec: Int
