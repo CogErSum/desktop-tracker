@@ -68,7 +68,15 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
     
     func deleteRecord(id: String) async throws {
         let memberId = UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
-        let _: [String: String] = try await apiClient.request(RecordsEndpoint.delete(id: id), memberId: memberId)
+        let url = try URL(string: "https://timetracker.karkach.tech/api/v1/records/\(id)")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue(memberId, forHTTPHeaderField: "X-Trello-Member-Id")
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.serverError(404, "Delete failed")
+        }
         await cache.invalidateAll()
     }
     
