@@ -13,12 +13,18 @@ struct DesktopTrackerApp: App {
             ContentView()
         }
         .defaultSize(width: 1000, height: 700)
-        .handlesExternalEvents(matching: [])
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
+    }
+    
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            NSApp.setActivationPolicy(.regular)
+        }
     }
 }
