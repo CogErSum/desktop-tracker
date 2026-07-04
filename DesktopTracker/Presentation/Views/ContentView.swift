@@ -13,9 +13,6 @@ struct ContentView: View {
                     NavigationLink(value: "records") {
                         Label("Records", systemImage: "list.bullet")
                     }
-                    NavigationLink(value: "manual") {
-                        Label("Manual Entry", systemImage: "plus.circle")
-                    }
                     NavigationLink(value: "timer") {
                         Label("Timer", systemImage: "timer")
                     }
@@ -34,8 +31,6 @@ struct ContentView: View {
                     DashboardView()
                 case "records":
                     RecordsView()
-                case "manual":
-                    ManualEntryView()
                 case "timer":
                     TimerView(cardId: "")
                 case "settings":
