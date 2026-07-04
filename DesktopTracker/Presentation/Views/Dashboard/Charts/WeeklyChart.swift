@@ -23,7 +23,7 @@ struct WeeklyChart: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .weekOfYear)) { _ in
                 AxisGridLine()
-                AxisValueLabel(format: .dateTime.weekOfYear().month(.abbreviated))
+                AxisValueLabel(format: .dateTime.month(.abbreviated).day())
             }
         }
         .frame(height: 200)

@@ -22,7 +22,8 @@ struct DailyChart: View {
             AxisMarks(position: .leading) { _ in
                 AxisGridLine()
                 AxisValueLabel { value in
-                    Text("\(value, format: .number.precision(.fractionLength(1)))h")
+                    let hours = value.as(Double.self) ?? 0
+                    return Text(String(format: "%.1fh", hours))
                 }
             }
         }
