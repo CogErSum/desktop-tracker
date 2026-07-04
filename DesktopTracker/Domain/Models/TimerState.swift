@@ -79,15 +79,17 @@ class TimerState: ObservableObject {
         conflictInfo = nil
         
         do {
-            try await repository.stopTimer(memberId: memberId)
-            activeTimer = nil
-            stopElapsedTimer()
-            elapsed = 0
-            activeCardName = ""
+            let _ = try await repository.stopTimer(memberId: memberId)
+        } catch APIError.serverError(404, _) {
+            // Timer already stopped
         } catch {
             self.error = "Failed to stop timer"
         }
         
+        activeTimer = nil
+        stopElapsedTimer()
+        elapsed = 0
+        activeCardName = ""
         loading = false
     }
     

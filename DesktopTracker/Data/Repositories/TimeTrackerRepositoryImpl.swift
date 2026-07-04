@@ -30,7 +30,7 @@ class TimeTrackerRepositoryImpl: TimeTrackerRepository {
     
     func stopTimer(memberId: String) async throws {
         do {
-            let _: [String: String] = try await apiClient.request(TimerEndpoint.stop, memberId: memberId)
+            let _: Data = try await apiClient.requestData(TimerEndpoint.stop, memberId: memberId)
         } catch APIError.serverError(404, _) {
             // Timer already stopped
         }
