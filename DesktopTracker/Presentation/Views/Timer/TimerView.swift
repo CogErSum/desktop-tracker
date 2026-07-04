@@ -207,7 +207,17 @@ struct TimerView: View {
         selectedCard = nil
         let repository = TimeTrackerRepositoryImpl()
         do {
-            cards = try await repository.getBoardCards(boardId: boardId)
+            let memberId = UserDefaults.standard.string(forKey: "memberId") ?? "6a100df28c8a4d38a17c0c5f"
+            let records = try await repository.getRecords(memberId: memberId)
+            let cardIds = Array(Set(records.map { $0.trelloCardId }))
+            if !cardIds.isEmpty {
+                let names = try await repository.getCardNames(cardIds: cardIds)
+                cards = names.map { BoardCard(id: $0.key, name: $0.value) }
+                    .filter { !$0.name.isEmpty }
+                    .sorted { $0.name < $1.name }
+            } else {
+                cards = []
+            }
         } catch {
             print("Failed to load cards: \(error)")
             cards = []
