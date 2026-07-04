@@ -15,10 +15,11 @@ class APIClient {
     
     func request<T: Decodable>(_ endpoint: Endpoint, memberId: String? = nil) async throws -> T {
         let url = try endpoint.url(baseURL: baseURL)
-        print("[API] GET \(url.absoluteString)")
+        print("[API] \(endpoint.method) \(url.absoluteString)")
         
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
         if let memberId = memberId {
@@ -26,7 +27,8 @@ class APIClient {
         }
         
         if let body = endpoint.body {
-            request.httpBody = try JSONSerialization.data(withJSONObject: body)
+            let data = try JSONSerialization.data(withJSONObject: body, options: [])
+            request.httpBody = data
         }
         
         let (data, response) = try await session.data(for: request)
@@ -48,25 +50,29 @@ class APIClient {
             throw APIError.serverError(httpResponse.statusCode, bodyStr)
         }
         
-        do {
-            let decoder = JSONDecoder()
-            let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-            decoder.dateDecodingStrategy = .custom { decoder in
-                let container = try decoder.singleValueContainer()
-                let dateString = try container.decode(String.self)
-                if let date = formatter.date(from: dateString) {
-                    return date
-                }
-                let fallback = ISO8601DateFormatter()
-                fallback.formatOptions = [.withInternetDateTime]
-                if let date = fallback.date(from: dateString) {
-                    return date
-                }
-                throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot parse date: \(dateString)")
+        guard !data.isEmpty else {
+            throw APIError.serverError(204, "No content")
+        }
+        
+        let decoder = JSONDecoder()
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        decoder.dateDecodingStrategy = .custom { decoder in
+            let container = try decoder.singleValueContainer()
+            let dateString = try container.decode(String.self)
+            if let date = formatter.date(from: dateString) {
+                return date
             }
-            let decoded = try decoder.decode(T.self, from: data)
-            return decoded
+            let fallback = ISO8601DateFormatter()
+            fallback.formatOptions = [.withInternetDateTime]
+            if let date = fallback.date(from: dateString) {
+                return date
+            }
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot parse date: \(dateString)")
+        }
+        
+        do {
+            return try decoder.decode(T.self, from: data)
         } catch {
             let bodyStr = String(data: data, encoding: .utf8) ?? "unknown"
             print("[API] Decode error. Response: \(bodyStr.prefix(300))")
@@ -78,6 +84,7 @@ class APIClient {
         let url = try endpoint.url(baseURL: baseURL)
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
         if let memberId = memberId {
