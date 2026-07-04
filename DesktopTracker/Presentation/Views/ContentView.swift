@@ -17,11 +17,8 @@ struct ContentView: View {
                     NavigationLink(value: "manual") {
                         Label("Manual Entry", systemImage: "plus.circle")
                     }
-                    
-                    Button {
-                        showingStartTimer = true
-                    } label: {
-                        Label("Start Timer", systemImage: "play.circle")
+                    NavigationLink(value: "timer") {
+                        Label("Timer", systemImage: "timer")
                     }
                 }
                 
@@ -40,6 +37,8 @@ struct ContentView: View {
                     RecordsView()
                 case "manual":
                     ManualEntryView()
+                case "timer":
+                    TimerView(cardId: "")
                 case "settings":
                     SettingsView()
                 default:
@@ -50,8 +49,5 @@ struct ContentView: View {
             DashboardView()
         }
         .frame(minWidth: 800, minHeight: 600)
-        .sheet(isPresented: $showingStartTimer) {
-            StartTimerView()
-        }
     }
 }
