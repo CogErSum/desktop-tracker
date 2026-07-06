@@ -47,7 +47,7 @@ struct ContentView: View {
             .padding(.bottom, 16)
         }
         .frame(width: 220)
-        .background(Color.tmst.surface)
+        .background(Color.white)
     }
     
     private func sidebarItem(icon: String, title: String, tab: String) -> some View {
@@ -64,7 +64,7 @@ struct ContentView: View {
             }
             .foregroundColor(selectedTab == tab ? Color.tmst.accent : Color.tmst.textPrimary)
             .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .padding(.vertical, 10)
             .background(
                 RoundedRectangle(cornerRadius: 8)
                     .fill(selectedTab == tab ? Color.tmst.accentLight : Color.clear)

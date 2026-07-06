@@ -6,10 +6,16 @@ struct DashboardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             headerSection
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 24)
-                .padding(.top, 24)
-                .padding(.bottom, 16)
-                .background(Color.tmst.background)
+                .padding(.vertical, 20)
+                .background(Color.white)
+                .overlay(
+                    Rectangle()
+                        .fill(Color.tmst.stroke)
+                        .frame(height: 1),
+                    alignment: .bottom
+                )
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {

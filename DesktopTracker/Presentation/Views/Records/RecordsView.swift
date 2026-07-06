@@ -8,10 +8,16 @@ struct RecordsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             headerSection
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 24)
-                .padding(.top, 24)
-                .padding(.bottom, 16)
-                .background(Color.tmst.background)
+                .padding(.vertical, 20)
+                .background(Color.white)
+                .overlay(
+                    Rectangle()
+                        .fill(Color.tmst.stroke)
+                        .frame(height: 1),
+                    alignment: .bottom
+                )
             
             toolbarSection
             
@@ -60,7 +66,7 @@ struct RecordsView: View {
                     .textFieldStyle(.plain)
             }
             .padding(8)
-            .background(Color.tmst.surface)
+            .background(Color.white)
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
@@ -83,14 +89,16 @@ struct RecordsView: View {
             Button {
                 Task { await viewModel.loadRecords() }
             } label: {
-                Image(systemName: "arrow.clockwise")
+                HStack(spacing: 6) {
+                    Image(systemName: "arrow.clockwise")
+                    Text("Refresh")
+                }
             }
-            .buttonStyle(TMSTButtonStyle(color: Color.tmst.surface))
-            .foregroundColor(Color.tmst.textPrimary)
+            .buttonStyle(TMSTButtonStyle(color: Color.tmst.accentHover))
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 12)
-        .background(Color.tmst.background)
+        .background(Color.white)
         .overlay(
             Rectangle()
                 .fill(Color.tmst.stroke)
@@ -143,6 +151,9 @@ struct RecordsView: View {
                                 selectedRecord = record
                             }
                             .contextMenu {
+                                Button("Edit") {
+                                    selectedRecord = record
+                                }
                                 Button("Delete", role: .destructive) {
                                     Task { await viewModel.deleteRecord(record) }
                                 }
@@ -254,7 +265,7 @@ struct AddActivityView: View {
             footer
         }
         .frame(minWidth: 480, minHeight: 450)
-        .background(Color.tmst.background)
+        .background(Color.white)
         .task {
             await loadRecentCards()
         }
@@ -291,7 +302,7 @@ struct AddActivityView: View {
             Button("Cancel") {
                 dismiss()
             }
-            .buttonStyle(TMSTButtonStyle(color: Color.tmst.surface))
+            .buttonStyle(TMSTButtonStyle(color: Color.tmst.stroke))
             .foregroundColor(Color.tmst.textPrimary)
             
             Button {
@@ -456,21 +467,40 @@ struct AddActivityView: View {
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(Color.tmst.textPrimary)
                 
-                HStack(spacing: 8) {
-                    Picker("Hours", selection: $durationHours) {
-                        ForEach(0..<24) { hour in
-                            Text("\(hour)h").tag(hour)
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Hours")
+                            .font(.system(size: 11))
+                            .foregroundColor(Color.tmst.textSecondary)
+                        Picker("", selection: $durationHours) {
+                            ForEach(0..<24) { hour in
+                                Text("\(hour)").tag(hour)
+                            }
                         }
+                        .labelsHidden()
+                        .frame(width: 100)
                     }
-                    .frame(width: 80)
                     
-                    Picker("Minutes", selection: $durationMinutes) {
-                        ForEach(0..<60) { minute in
-                            Text("\(minute)m").tag(minute)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Minutes")
+                            .font(.system(size: 11))
+                            .foregroundColor(Color.tmst.textSecondary)
+                        Picker("", selection: $durationMinutes) {
+                            ForEach(0..<60) { minute in
+                                Text("\(minute)").tag(minute)
+                            }
                         }
+                        .labelsHidden()
+                        .frame(width: 100)
                     }
-                    .frame(width: 80)
                 }
+                .padding(12)
+                .background(Color.tmst.surface)
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.tmst.stroke, lineWidth: 1)
+                )
             }
             
             VStack(alignment: .leading, spacing: 8) {
@@ -480,6 +510,13 @@ struct AddActivityView: View {
                 
                 DatePicker("Select date", selection: $recordDate, displayedComponents: .date)
                     .labelsHidden()
+                    .padding(12)
+                    .background(Color.tmst.surface)
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.tmst.stroke, lineWidth: 1)
+                    )
             }
             
             VStack(alignment: .leading, spacing: 8) {
