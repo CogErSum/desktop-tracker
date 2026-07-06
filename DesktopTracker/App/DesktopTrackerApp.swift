@@ -34,6 +34,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         false
     }
     
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(systemWillSleep),
+            name: NSWorkspace.willSleepNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func systemWillSleep(_ notification: Notification) {
+        print("[AppDelegate] System going to sleep, stopping timer")
+        Task { @MainActor in
+            await TimerState.shared.stopTimer()
+        }
+    }
+    
     func showMainWindow() {
         if let w = window {
             w.makeKeyAndOrderFront(nil)
