@@ -5,43 +5,87 @@ struct ContentView: View {
     
     var body: some View {
         NavigationSplitView {
-            List {
-                Section("Tracking") {
-                    NavigationLink(value: "dashboard") {
-                        Label("Dashboard", systemImage: "chart.bar")
-                    }
-                    NavigationLink(value: "records") {
-                        Label("Records", systemImage: "list.bullet")
-                    }
-                    NavigationLink(value: "timer") {
-                        Label("Timer", systemImage: "timer")
-                    }
-                }
-                
-                Section("Settings") {
-                    NavigationLink(value: "settings") {
-                        Label("Settings", systemImage: "gear")
-                    }
-                }
-            }
-            .navigationTitle("TeamSight")
-            .navigationDestination(for: String.self) { tab in
-                switch tab {
-                case "dashboard":
-                    DashboardView()
-                case "records":
-                    RecordsView()
-                case "timer":
-                    TimerView(cardId: "")
-                case "settings":
-                    SettingsView()
-                default:
-                    Text("Unknown")
-                }
-            }
+            sidebar
         } detail: {
+            detailContent
+        }
+        .frame(minWidth: 900, minHeight: 600)
+    }
+    
+    private var sidebar: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 10) {
+                Circle()
+                    .fill(Color.tmst.accent)
+                    .frame(width: 32, height: 32)
+                    .overlay(
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                            .foregroundColor(.white)
+                            .font(.system(size: 14, weight: .semibold))
+                    )
+                Text("TeamSight")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(Color.tmst.textPrimary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+            .padding(.bottom, 24)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                sidebarItem(icon: "chart.bar.fill", title: "Dashboard", tab: "dashboard")
+                sidebarItem(icon: "clock.fill", title: "Timer", tab: "timer")
+                sidebarItem(icon: "list.bullet", title: "Records", tab: "records")
+            }
+            .padding(.horizontal, 12)
+            
+            Spacer()
+            
+            VStack(alignment: .leading, spacing: 4) {
+                sidebarItem(icon: "gearshape.fill", title: "Settings", tab: "settings")
+            }
+            .padding(.horizontal, 12)
+            .padding(.bottom, 16)
+        }
+        .frame(width: 220)
+        .background(Color.tmst.surface)
+    }
+    
+    private func sidebarItem(icon: String, title: String, tab: String) -> some View {
+        Button {
+            selectedTab = tab
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: icon)
+                    .font(.system(size: 14))
+                    .frame(width: 20)
+                Text(title)
+                    .font(.system(size: 13, weight: selectedTab == tab ? .semibold : .regular))
+                Spacer()
+            }
+            .foregroundColor(selectedTab == tab ? Color.tmst.accent : Color.tmst.textPrimary)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(selectedTab == tab ? Color.tmst.accentLight : Color.clear)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+    
+    @ViewBuilder
+    private var detailContent: some View {
+        switch selectedTab {
+        case "dashboard":
+            DashboardView()
+        case "timer":
+            TimerView(cardId: "")
+        case "records":
+            RecordsView()
+        case "settings":
+            SettingsView()
+        default:
             DashboardView()
         }
-        .frame(minWidth: 800, minHeight: 600)
     }
 }
