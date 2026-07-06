@@ -499,10 +499,9 @@ struct AddActivityView: View {
                     .foregroundColor(Color.tmst.textPrimary)
                 
                 DatePicker(selection: $recordDate, displayedComponents: .date) {
-                    Text(recordDate.formatted(date: .long, time: .omitted))
-                        .foregroundColor(Color.tmst.textPrimary)
+                    EmptyView()
                 }
-                .datePickerStyle(.compact)
+                .datePickerStyle(.field)
                 .labelsHidden()
             }
             
