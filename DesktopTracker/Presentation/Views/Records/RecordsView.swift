@@ -499,6 +499,15 @@ struct AddActivityView: View {
                     .foregroundColor(Color.tmst.textPrimary)
                 
                 DatePicker("Select date", selection: $recordDate, displayedComponents: .date)
+                    .labelsHidden()
+                    .colorMultiply(Color.tmst.textPrimary)
+                    .padding(8)
+                    .background(Color.tmst.surface)
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.tmst.stroke, lineWidth: 1)
+                    )
             }
             
             VStack(alignment: .leading, spacing: 8) {
@@ -508,6 +517,7 @@ struct AddActivityView: View {
                 
                 TextField("Optional note...", text: $comment)
                     .textFieldStyle(.roundedBorder)
+                    .colorMultiply(Color.tmst.textPrimary)
             }
         }
     }
