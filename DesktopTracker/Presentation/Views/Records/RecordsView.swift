@@ -468,39 +468,22 @@ struct AddActivityView: View {
                     .foregroundColor(Color.tmst.textPrimary)
                 
                 HStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Hours")
-                            .font(.system(size: 11))
-                            .foregroundColor(Color.tmst.textSecondary)
-                        Picker("", selection: $durationHours) {
-                            ForEach(0..<24) { hour in
-                                Text("\(hour)").tag(hour)
-                            }
+                    Picker("Hours", selection: $durationHours) {
+                        ForEach(0..<24) { hour in
+                            Text("\(hour)h").tag(hour)
                         }
-                        .labelsHidden()
-                        .frame(width: 100)
                     }
+                    .pickerStyle(.menu)
+                    .frame(width: 120)
                     
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Minutes")
-                            .font(.system(size: 11))
-                            .foregroundColor(Color.tmst.textSecondary)
-                        Picker("", selection: $durationMinutes) {
-                            ForEach(0..<60) { minute in
-                                Text("\(minute)").tag(minute)
-                            }
+                    Picker("Minutes", selection: $durationMinutes) {
+                        ForEach(0..<60) { minute in
+                            Text("\(minute)m").tag(minute)
                         }
-                        .labelsHidden()
-                        .frame(width: 100)
                     }
+                    .pickerStyle(.menu)
+                    .frame(width: 120)
                 }
-                .padding(12)
-                .background(Color.tmst.surface)
-                .cornerRadius(8)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.tmst.stroke, lineWidth: 1)
-                )
             }
             
             VStack(alignment: .leading, spacing: 8) {
@@ -509,14 +492,6 @@ struct AddActivityView: View {
                     .foregroundColor(Color.tmst.textPrimary)
                 
                 DatePicker("Select date", selection: $recordDate, displayedComponents: .date)
-                    .labelsHidden()
-                    .padding(12)
-                    .background(Color.tmst.surface)
-                    .cornerRadius(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.tmst.stroke, lineWidth: 1)
-                    )
             }
             
             VStack(alignment: .leading, spacing: 8) {
@@ -525,14 +500,7 @@ struct AddActivityView: View {
                     .foregroundColor(Color.tmst.textPrimary)
                 
                 TextField("Optional note...", text: $comment)
-                    .textFieldStyle(.plain)
-                    .padding(10)
-                    .background(Color.tmst.surface)
-                    .cornerRadius(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.tmst.stroke, lineWidth: 1)
-                    )
+                    .textFieldStyle(.roundedBorder)
             }
         }
     }
