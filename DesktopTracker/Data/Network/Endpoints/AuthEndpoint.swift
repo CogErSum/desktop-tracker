@@ -1,6 +1,6 @@
 import Foundation
 
-struct AuthEndpoint: Endpoint {
+enum AuthEndpoint: Endpoint {
     case start
     case status(memberId: String)
     case unlink(memberId: String)
