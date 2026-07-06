@@ -498,10 +498,11 @@ struct AddActivityView: View {
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(Color.tmst.textPrimary)
                 
-                DatePicker("Select date", selection: $recordDate, displayedComponents: .date)
+                DatePicker("", selection: $recordDate, displayedComponents: .date)
                     .labelsHidden()
+                    .colorMultiply(Color.tmst.textPrimary)
                     .padding(8)
-                    .background(Color.white)
+                    .background(Color.tmst.surface)
                     .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
@@ -514,10 +515,11 @@ struct AddActivityView: View {
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(Color.tmst.textPrimary)
                 
-                TextField("Optional note...", text: $comment)
+                TextField("", text: $comment)
                     .textFieldStyle(.roundedBorder)
+                    .colorMultiply(Color.tmst.textPrimary)
                     .padding(8)
-                    .background(Color.white)
+                    .background(Color.tmst.surface)
                     .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
