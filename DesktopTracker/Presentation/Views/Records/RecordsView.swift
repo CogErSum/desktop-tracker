@@ -467,23 +467,28 @@ struct AddActivityView: View {
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(Color.tmst.textPrimary)
                 
-                HStack(spacing: 12) {
+                HStack(spacing: 8) {
                     Picker("Hours", selection: $durationHours) {
                         ForEach(0..<24) { hour in
                             Text("\(hour)h").tag(hour)
                         }
                     }
-                    .pickerStyle(.menu)
-                    .frame(width: 120)
+                    .labelsHidden()
                     
                     Picker("Minutes", selection: $durationMinutes) {
-                        ForEach(0..<60) { minute in
+                        ForEach(0..<60, id: \.self) { minute in
                             Text("\(minute)m").tag(minute)
                         }
                     }
-                    .pickerStyle(.menu)
-                    .frame(width: 120)
+                    .labelsHidden()
                 }
+                .padding(8)
+                .background(Color.tmst.surface)
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.tmst.stroke, lineWidth: 1)
+                )
             }
             
             VStack(alignment: .leading, spacing: 8) {
