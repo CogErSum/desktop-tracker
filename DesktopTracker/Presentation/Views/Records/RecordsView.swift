@@ -474,6 +474,7 @@ struct AddActivityView: View {
                         }
                     }
                     .labelsHidden()
+                    .colorMultiply(Color.tmst.textPrimary)
                     
                     Picker("Minutes", selection: $durationMinutes) {
                         ForEach(0..<60, id: \.self) { minute in
@@ -481,6 +482,7 @@ struct AddActivityView: View {
                         }
                     }
                     .labelsHidden()
+                    .colorMultiply(Color.tmst.textPrimary)
                 }
                 .padding(8)
                 .background(Color.tmst.surface)
