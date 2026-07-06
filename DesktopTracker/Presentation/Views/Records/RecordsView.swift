@@ -498,9 +498,12 @@ struct AddActivityView: View {
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(Color.tmst.textPrimary)
                 
-                DatePicker("Select date", selection: $recordDate, displayedComponents: .date)
-                    .labelsHidden()
-                    .colorMultiply(Color.tmst.textPrimary)
+                DatePicker(selection: $recordDate, displayedComponents: .date) {
+                    Text(recordDate.formatted(date: .long, time: .omitted))
+                        .foregroundColor(Color.tmst.textPrimary)
+                }
+                .datePickerStyle(.compact)
+                .labelsHidden()
             }
             
             VStack(alignment: .leading, spacing: 8) {
