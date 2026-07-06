@@ -32,17 +32,24 @@ struct SettingsView: View {
                                     RoundedRectangle(cornerRadius: 8)
                                         .stroke(Color.tmst.stroke, lineWidth: 1)
                                 )
+                        }
+                    }
+                    
+                    sectionCard(title: "Account", icon: "person.circle") {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(Color.tmst.accent)
+                                Text("Connected to Trello")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundColor(Color.tmst.textPrimary)
+                            }
                             
-                            fieldLabel("Member ID")
-                            TextField("Enter your member ID", text: $viewModel.memberId)
-                                .textFieldStyle(.roundedBorder)
-                                .padding(10)
-                                .background(Color.white)
-                                .cornerRadius(8)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color.tmst.stroke, lineWidth: 1)
-                                )
+                            Button("Sign Out") {
+                                viewModel.signOut()
+                            }
+                            .font(.system(size: 12))
+                            .foregroundColor(Color.tmst.error)
                         }
                     }
                     
