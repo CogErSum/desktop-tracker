@@ -110,9 +110,10 @@ class TimerState: ObservableObject {
     private func startElapsedTimer() {
         stopElapsedTimer()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            guard let self, let startTime = self.activeTimer?.startedAt else { return }
+            let newElapsed = Int(Date().timeIntervalSince(startTime))
             Task { @MainActor in
-                guard let self, let startTime = self.activeTimer?.startedAt else { return }
-                self.elapsed = Int(Date().timeIntervalSince(startTime))
+                self.elapsed = newElapsed
             }
         }
     }
