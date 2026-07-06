@@ -16,18 +16,6 @@ struct DesktopTrackerApp: App {
         .defaultSize(width: 1000, height: 700)
     }
 }
-        
-        Settings {
-            SettingsView()
-        }
-    }
-    
-    init() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            AppDelegate.shared.showMainWindow()
-        }
-    }
-}
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     static let shared = AppDelegate()
@@ -58,9 +46,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         newWindow.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         self.window = newWindow
-    }
-    
-    func hideMainWindow() {
-        window?.orderOut(nil)
     }
 }
