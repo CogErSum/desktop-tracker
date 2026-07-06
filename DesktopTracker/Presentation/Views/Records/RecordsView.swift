@@ -498,11 +498,28 @@ struct AddActivityView: View {
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(Color.tmst.textPrimary)
                 
-                DatePicker(selection: $recordDate, displayedComponents: .date) {
-                    EmptyView()
+                HStack {
+                    Text(recordDate.formatted(date: .long, time: .omitted))
+                        .foregroundColor(Color.tmst.textPrimary)
+                    Spacer()
+                    DatePicker("", selection: $recordDate, displayedComponents: .date)
+                        .labelsHidden()
+                        .frame(width: 0, height: 0)
+                        .clipped()
+                        .opacity(0)
                 }
-                .datePickerStyle(.field)
-                .labelsHidden()
+                .padding(8)
+                .background(Color.tmst.surface)
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.tmst.stroke, lineWidth: 1)
+                )
+                .overlay(
+                    DatePicker("", selection: $recordDate, displayedComponents: .date)
+                        .labelsHidden()
+                        .opacity(0)
+                )
             }
             
             VStack(alignment: .leading, spacing: 8) {
