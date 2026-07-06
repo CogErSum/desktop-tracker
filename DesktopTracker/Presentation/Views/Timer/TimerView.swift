@@ -12,25 +12,31 @@ struct TimerView: View {
     let cardId: String
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                headerSection
-                
-                if let timer = timerState.activeTimer {
-                    activeTimerSection(timer)
-                } else if let conflict = timerState.conflictInfo {
-                    conflictSection(conflict)
-                } else {
-                    startTimerSection
+        VStack(alignment: .leading, spacing: 0) {
+            headerSection
+                .padding(.horizontal, 24)
+                .padding(.top, 24)
+                .padding(.bottom, 16)
+                .background(Color.tmst.background)
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    if let timer = timerState.activeTimer {
+                        activeTimerSection(timer)
+                    } else if let conflict = timerState.conflictInfo {
+                        conflictSection(conflict)
+                    } else {
+                        startTimerSection
+                    }
+                    
+                    if let error = timerState.error {
+                        errorBanner(error)
+                    }
                 }
-                
-                if let error = timerState.error {
-                    errorBanner(error)
-                }
+                .padding(24)
             }
-            .padding(24)
         }
-        .background(Color.tmst.surface.opacity(0.3))
+        .background(Color.tmst.surface)
         .task {
             await timerState.checkActiveTimer()
             await loadBoards()
@@ -49,40 +55,38 @@ struct TimerView: View {
     }
     
     private func activeTimerSection(_ timer: ActiveTimer) -> some View {
-        VStack(spacing: 20) {
-            HStack(spacing: 16) {
-                Image(systemName: "timer")
-                    .font(.system(size: 28))
-                    .foregroundColor(.white)
-                    .frame(width: 56, height: 56)
-                    .background(Color.tmst.accent)
-                    .cornerRadius(16)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(timerState.formattedTime(timerState.elapsed))
-                        .font(.system(size: 32, weight: .bold, design: .monospaced))
-                        .foregroundColor(Color.tmst.textPrimary)
-                    Text(timerState.activeCardName.isEmpty ? "Timer is running" : timerState.activeCardName)
-                        .font(.system(size: 14))
-                        .foregroundColor(Color.tmst.textSecondary)
-                }
-                
-                Spacer()
-                
-                Button {
-                    Task { await timerState.stopTimer() }
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "stop.fill")
-                        Text("Stop")
-                    }
-                }
-                .buttonStyle(TMSTButtonStyle(color: Color.tmst.error))
-                .disabled(timerState.loading)
+        HStack(spacing: 16) {
+            Image(systemName: "timer")
+                .font(.system(size: 28))
+                .foregroundColor(.white)
+                .frame(width: 56, height: 56)
+                .background(Color.tmst.accent)
+                .cornerRadius(16)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(timerState.formattedTime(timerState.elapsed))
+                    .font(.system(size: 32, weight: .bold, design: .monospaced))
+                    .foregroundColor(Color.tmst.textPrimary)
+                Text(timerState.activeCardName.isEmpty ? "Timer is running" : timerState.activeCardName)
+                    .font(.system(size: 14))
+                    .foregroundColor(Color.tmst.textSecondary)
             }
-            .padding(20)
-            .tmstCard()
+            
+            Spacer()
+            
+            Button {
+                Task { await timerState.stopTimer() }
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "stop.fill")
+                    Text("Stop")
+                }
+            }
+            .buttonStyle(TMSTButtonStyle(color: Color.tmst.error))
+            .disabled(timerState.loading)
         }
+        .padding(20)
+        .tmstCard()
     }
     
     private func conflictSection(_ conflict: TimerConflict) -> some View {
@@ -126,6 +130,10 @@ struct TimerView: View {
     
     private var startTimerSection: some View {
         VStack(alignment: .leading, spacing: 20) {
+            Text("Start Timer")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(Color.tmst.textPrimary)
+            
             boardSelection
             if selectedBoard != nil {
                 cardSelection
@@ -138,49 +146,92 @@ struct TimerView: View {
     
     private var boardSelection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("Select Board", systemImage: "square.stack")
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(Color.tmst.textPrimary)
+            Text("Board")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(Color.tmst.textSecondary)
+                .textCase(.uppercase)
             
             if loadingBoards {
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .padding()
+                HStack {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                    Text("Loading boards...")
+                        .font(.system(size: 13))
+                        .foregroundColor(Color.tmst.textSecondary)
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.tmst.surface)
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.tmst.stroke, lineWidth: 1)
+                )
             } else {
-                Picker("Board", selection: $selectedBoard) {
-                    Text("Choose board...").tag(nil as Board?)
+                Menu {
                     ForEach(boards) { board in
-                        Text(board.name).tag(board as Board?)
+                        Button(board.name) {
+                            selectedBoard = board
+                            Task { await loadCards(boardId: board.id) }
+                        }
                     }
-                }
-                .pickerStyle(.menu)
-                .onChange(of: selectedBoard) { _, newBoard in
-                    if let board = newBoard {
-                        Task { await loadCards(boardId: board.id) }
-                    } else {
-                        cards = []
-                        selectedCard = nil
+                } label: {
+                    HStack {
+                        Text(selectedBoard?.name ?? "Select board...")
+                            .foregroundColor(selectedBoard != nil ? Color.tmst.textPrimary : Color.tmst.textSecondary)
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 10))
+                            .foregroundColor(Color.tmst.textSecondary)
                     }
+                    .padding(12)
+                    .background(Color.tmst.surface)
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.tmst.stroke, lineWidth: 1)
+                    )
                 }
+                .buttonStyle(.plain)
             }
         }
     }
     
     private var cardSelection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("Select Card", systemImage: "creditcard")
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(Color.tmst.textPrimary)
+            Text("Card")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(Color.tmst.textSecondary)
+                .textCase(.uppercase)
             
             if loadingCards {
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .padding()
+                HStack {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                    Text("Loading cards...")
+                        .font(.system(size: 13))
+                        .foregroundColor(Color.tmst.textSecondary)
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.tmst.surface)
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.tmst.stroke, lineWidth: 1)
+                )
             } else if cards.isEmpty {
                 Text("No cards in this board")
                     .font(.system(size: 13))
                     .foregroundColor(Color.tmst.textSecondary)
-                    .padding()
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.tmst.surface)
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.tmst.stroke, lineWidth: 1)
+                    )
             } else {
                 ScrollView {
                     LazyVStack(spacing: 0) {
@@ -189,7 +240,7 @@ struct TimerView: View {
                         }
                     }
                 }
-                .frame(maxHeight: 280)
+                .frame(maxHeight: 250)
                 .background(Color.tmst.surface)
                 .cornerRadius(8)
                 .overlay(
@@ -201,34 +252,32 @@ struct TimerView: View {
     }
     
     private func cardRow(_ card: BoardCard) -> some View {
-        VStack(spacing: 0) {
-            Button {
-                selectedCard = card
-            } label: {
-                HStack {
-                    Text(card.name)
-                        .font(.system(size: 13))
-                        .foregroundColor(selectedCard?.id == card.id ? .white : Color.tmst.textPrimary)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
-                    Spacer()
-                    if selectedCard?.id == card.id {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.white)
-                    }
+        Button {
+            selectedCard = card
+        } label: {
+            HStack {
+                Text(card.name)
+                    .font(.system(size: 13))
+                    .foregroundColor(selectedCard?.id == card.id ? .white : Color.tmst.textPrimary)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                Spacer()
+                if selectedCard?.id == card.id {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.white)
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
-                .background(
-                    selectedCard?.id == card.id
-                        ? Color.tmst.accent
-                        : Color.clear
-                )
             }
-            .buttonStyle(.plain)
-            Divider()
-                .background(Color.tmst.stroke)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(
+                selectedCard?.id == card.id
+                    ? Color.tmst.accent
+                    : Color.clear
+            )
         }
+        .buttonStyle(.plain)
+        Divider()
+            .background(Color.tmst.stroke)
     }
     
     private var startButton: some View {

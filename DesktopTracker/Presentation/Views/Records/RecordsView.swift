@@ -8,10 +8,16 @@ struct RecordsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             headerSection
+                .padding(.horizontal, 24)
+                .padding(.top, 24)
+                .padding(.bottom, 16)
+                .background(Color.tmst.background)
+            
             toolbarSection
+            
             recordsContent
         }
-        .background(Color.tmst.surface.opacity(0.3))
+        .background(Color.tmst.surface)
         .task {
             await viewModel.loadRecords()
         }
@@ -43,9 +49,6 @@ struct RecordsView: View {
                 .font(.system(size: 14))
                 .foregroundColor(Color.tmst.textSecondary)
         }
-        .padding(.horizontal, 24)
-        .padding(.top, 24)
-        .padding(.bottom, 16)
     }
     
     private var toolbarSection: some View {
@@ -57,7 +60,7 @@ struct RecordsView: View {
                     .textFieldStyle(.plain)
             }
             .padding(8)
-            .background(Color.tmst.background)
+            .background(Color.tmst.surface)
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)

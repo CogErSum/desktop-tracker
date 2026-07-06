@@ -10,7 +10,7 @@ struct TMSTColors {
     let textPrimary = Color(red: 37/255, green: 29/255, blue: 29/255)
     let textSecondary = Color(red: 102/255, green: 97/255, blue: 97/255)
     let background = Color.white
-    let surface = Color(red: 246/255, green: 246/255, blue: 246/255)
+    let surface = Color(red: 248/255, green: 248/255, blue: 250/255)
     let stroke = Color(red: 235/255, green: 235/255, blue: 235/255)
     let success = Color(red: 132/255, green: 233/255, blue: 194/255)
     let warning = Color(red: 255/255, green: 199/255, blue: 153/255)
@@ -50,7 +50,6 @@ struct TMSTCardModifier: ViewModifier {
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(Color.tmst.stroke, lineWidth: 1)
             )
-            .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 2)
     }
 }
 

@@ -4,22 +4,28 @@ struct DashboardView: View {
     @State private var viewModel = DashboardViewModel()
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                headerSection
-                
-                if viewModel.loading {
-                    loadingView
-                } else if let data = viewModel.dashboardData {
-                    statsSection(data)
-                    recentActivitySection(data)
-                } else if let error = viewModel.error {
-                    errorView(error)
+        VStack(alignment: .leading, spacing: 0) {
+            headerSection
+                .padding(.horizontal, 24)
+                .padding(.top, 24)
+                .padding(.bottom, 16)
+                .background(Color.tmst.background)
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    if viewModel.loading {
+                        loadingView
+                    } else if let data = viewModel.dashboardData {
+                        statsSection(data)
+                        recentActivitySection(data)
+                    } else if let error = viewModel.error {
+                        errorView(error)
+                    }
                 }
+                .padding(24)
             }
-            .padding(24)
         }
-        .background(Color.tmst.surface.opacity(0.3))
+        .background(Color.tmst.surface)
         .task {
             await viewModel.loadDashboard()
         }
