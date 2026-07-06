@@ -23,21 +23,6 @@ struct SettingsView: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    sectionCard(title: "API Configuration", icon: "network") {
-                        VStack(alignment: .leading, spacing: 12) {
-                            fieldLabel("API Base URL")
-                            TextField("https://api.example.com", text: $viewModel.apiBaseURL)
-                                .textFieldStyle(.roundedBorder)
-                                .padding(10)
-                                .background(Color.white)
-                                .cornerRadius(8)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color.tmst.stroke, lineWidth: 1)
-                                )
-                        }
-                    }
-                    
                     sectionCard(title: "Account", icon: "person.circle") {
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
