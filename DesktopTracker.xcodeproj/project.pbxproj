@@ -101,8 +101,8 @@
 		A2000043 /* TMSTTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMSTTheme.swift; sourceTree = "<group>"; };
 		A2000044 /* APICache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICache.swift; sourceTree = "<group>"; };
 		A2000045 /* TimerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerState.swift; sourceTree = "<group>"; };
-		A2000046 /* AuthEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthEndpoint.swift; sourceTree = "<group>"; };
-		A2000047 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		A2000046 /* AuthEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthEndpoint.swift; path = DesktopTracker/Data/Network/Endpoints/AuthEndpoint.swift; sourceTree = "<group>"; };
+		A2000047 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoginView.swift; path = DesktopTracker/Presentation/Views/Login/LoginView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
