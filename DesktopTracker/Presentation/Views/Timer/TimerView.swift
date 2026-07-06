@@ -201,32 +201,34 @@ struct TimerView: View {
     }
     
     private func cardRow(_ card: BoardCard) -> some View {
-        Button {
-            selectedCard = card
-        } label: {
-            HStack {
-                Text(card.name)
-                    .font(.system(size: 13))
-                    .foregroundColor(selectedCard?.id == card.id ? .white : Color.tmst.textPrimary)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
-                Spacer()
-                if selectedCard?.id == card.id {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.white)
+        VStack(spacing: 0) {
+            Button {
+                selectedCard = card
+            } label: {
+                HStack {
+                    Text(card.name)
+                        .font(.system(size: 13))
+                        .foregroundColor(selectedCard?.id == card.id ? .white : Color.tmst.textPrimary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                    Spacer()
+                    if selectedCard?.id == card.id {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.white)
+                    }
                 }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(
+                    selectedCard?.id == card.id
+                        ? Color.tmst.accent
+                        : Color.clear
+                )
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
-            .background(
-                selectedCard?.id == card.id
-                    ? Color.tmst.accent
-                    : Color.clear
-            )
+            .buttonStyle(.plain)
+            Divider()
+                .background(Color.tmst.stroke)
         }
-        .buttonStyle(.plain)
-        Divider()
-            .background(Color.tmst.stroke)
     }
     
     private var startButton: some View {
