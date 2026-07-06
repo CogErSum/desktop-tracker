@@ -3,7 +3,6 @@ import Foundation
 enum AuthEndpoint: Endpoint {
     case start
     case status(memberId: String)
-    case latest
     case unlink(memberId: String)
     
     var path: String {
@@ -12,8 +11,6 @@ enum AuthEndpoint: Endpoint {
             return "/auth/trello/start"
         case .status(let memberId):
             return "/auth/trello/status?member_id=\(memberId)"
-        case .latest:
-            return "/auth/trello/latest"
         case .unlink(let memberId):
             return "/auth/trello/unlink?member_id=\(memberId)"
         }
@@ -21,7 +18,7 @@ enum AuthEndpoint: Endpoint {
     
     var method: String {
         switch self {
-        case .start, .status, .latest:
+        case .start, .status:
             return "GET"
         case .unlink:
             return "POST"
@@ -37,20 +34,10 @@ struct AuthStatus: Codable {
 
 struct AuthStartResponse: Codable {
     let authorizationUrl: String
-    let requestToken: String
+    let state: String
     
     enum CodingKeys: String, CodingKey {
         case authorizationUrl = "authorization_url"
-        case requestToken = "request_token"
-    }
-}
-
-struct AuthLatestResponse: Codable {
-    let memberId: String?
-    let authorized: Bool
-    
-    enum CodingKeys: String, CodingKey {
-        case memberId = "member_id"
-        case authorized
+        case state
     }
 }
