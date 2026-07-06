@@ -5,7 +5,7 @@ struct DesktopTrackerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
-        MenuBarExtra("TeamSight", systemImage: "timer") {
+        MenuBarExtra("TeamSight", image: "MenuBarIcon") {
             MenuBarView()
         }
         
