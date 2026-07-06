@@ -9,7 +9,7 @@ struct ContentView: View {
             mainApp
         } else {
             LoginView { memberId in
-                UserDefaults.standard.set(memberId.isEmpty ? "6a100df28c8a4d38a17c0c5f" : memberId, forKey: "memberId")
+                UserDefaults.standard.set(memberId, forKey: "memberId")
                 isLoggedIn = true
             }
         }
@@ -53,7 +53,23 @@ struct ContentView: View {
             Spacer()
             
             VStack(alignment: .leading, spacing: 4) {
-                sidebarItem(icon: "gearshape.fill", title: "Settings", tab: "settings")
+                Button {
+                    UserDefaults.standard.removeObject(forKey: "memberId")
+                    isLoggedIn = false
+                } label: {
+                    HStack(spacing: 10) {
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .font(.system(size: 14))
+                            .frame(width: 20)
+                        Text("Sign Out")
+                            .font(.system(size: 13, weight: .regular))
+                        Spacer()
+                    }
+                    .foregroundColor(Color.tmst.error)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+                }
+                .buttonStyle(.plain)
             }
             .padding(.horizontal, 12)
             .padding(.bottom, 16)
@@ -94,10 +110,6 @@ struct ContentView: View {
             TimerView(cardId: "")
         case "records":
             RecordsView()
-        case "settings":
-            SettingsView(onSignOut: {
-                isLoggedIn = false
-            })
         default:
             DashboardView()
         }
