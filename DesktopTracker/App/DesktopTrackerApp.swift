@@ -12,6 +12,15 @@ struct DesktopTrackerApp: App {
         WindowGroup("TeamSight Tracker") {
             ContentView()
                 .preferredColorScheme(.light)
+                .onOpenURL { url in
+                    if url.scheme == "teamsight",
+                       url.host == "auth",
+                       let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                       let memberId = components.queryItems?.first(where: { $0.name == "member_id" })?.value {
+                        UserDefaults.standard.set(memberId, forKey: "memberId")
+                        NotificationCenter.default.post(name: .authCompleted, object: memberId)
+                    }
+                }
         }
         .defaultSize(width: 1000, height: 700)
     }
@@ -47,4 +56,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
         self.window = newWindow
     }
+}
+
+extension Notification.Name {
+    static let authCompleted = Notification.Name("authCompleted")
 }

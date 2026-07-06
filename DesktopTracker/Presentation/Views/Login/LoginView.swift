@@ -1,5 +1,4 @@
 import SwiftUI
-import AuthenticationServices
 
 struct LoginView: View {
     let onComplete: (String) -> Void
@@ -28,7 +27,15 @@ struct LoginView: View {
             Spacer()
             
             if loading {
-                ProgressView("Connecting to Trello...")
+                VStack(spacing: 12) {
+                    ProgressView()
+                    Text("Waiting for authorization...")
+                        .font(.system(size: 13))
+                        .foregroundColor(Color.tmst.textSecondary)
+                    Text("Complete login in your browser")
+                        .font(.system(size: 12))
+                        .foregroundColor(Color.tmst.textSecondary)
+                }
             } else {
                 Button {
                     Task { await startAuth() }
@@ -58,6 +65,11 @@ struct LoginView: View {
         }
         .frame(width: 400, height: 400)
         .background(Color.white)
+        .onReceive(NotificationCenter.default.publisher(for: .authCompleted)) { notification in
+            if let memberId = notification.object as? String {
+                onComplete(memberId)
+            }
+        }
     }
     
     private func startAuth() async {
@@ -70,23 +82,9 @@ struct LoginView: View {
             if let url = URL(string: response.authorizationUrl) {
                 NSWorkspace.shared.open(url)
             }
-            
-            try await Task.sleep(for: .seconds(2))
-            
-            for _ in 0..<30 {
-                try await Task.sleep(for: .seconds(2))
-                let latest: AuthLatestResponse = try await APIClient.shared.request(AuthEndpoint.latest)
-                if latest.authorized, let memberId = latest.memberId {
-                    onComplete(memberId)
-                    return
-                }
-            }
-            
-            self.error = "Authorization timeout. Please try again."
         } catch {
             self.error = "Failed to start authorization: \(error.localizedDescription)"
+            loading = false
         }
-        
-        loading = false
     }
 }
