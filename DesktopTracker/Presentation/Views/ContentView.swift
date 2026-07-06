@@ -95,7 +95,9 @@ struct ContentView: View {
         case "records":
             RecordsView()
         case "settings":
-            SettingsView()
+            SettingsView(onSignOut: {
+                isLoggedIn = false
+            })
         default:
             DashboardView()
         }

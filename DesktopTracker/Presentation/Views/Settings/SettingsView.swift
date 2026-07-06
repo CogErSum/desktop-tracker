@@ -3,6 +3,9 @@ import SwiftUI
 struct SettingsView: View {
     @State private var viewModel = SettingsViewModel()
     @State private var saved = false
+    @Environment(\.dismiss) private var dismiss
+    
+    var onSignOut: (() -> Void)?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -47,6 +50,7 @@ struct SettingsView: View {
                             
                             Button("Sign Out") {
                                 viewModel.signOut()
+                                onSignOut?()
                             }
                             .font(.system(size: 12))
                             .foregroundColor(Color.tmst.error)
