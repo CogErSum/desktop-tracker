@@ -64,7 +64,6 @@ struct LoginView: View {
         loading = true
         error = nil
         
-        let repository = TimeTrackerRepositoryImpl()
         do {
             let response: AuthStartResponse = try await APIClient.shared.request(AuthEndpoint.start)
             
@@ -76,9 +75,9 @@ struct LoginView: View {
             
             for _ in 0..<30 {
                 try await Task.sleep(for: .seconds(2))
-                let status: AuthStatus = try await APIClient.shared.request(AuthEndpoint.status(memberId: ""))
-                if status.authorized {
-                    onComplete("")
+                let latest: AuthLatestResponse = try await APIClient.shared.request(AuthEndpoint.latest)
+                if latest.authorized, let memberId = latest.memberId {
+                    onComplete(memberId)
                     return
                 }
             }
