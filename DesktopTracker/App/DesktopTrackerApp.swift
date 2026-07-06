@@ -9,6 +9,14 @@ struct DesktopTrackerApp: App {
             MenuBarView()
         }
         
+        WindowGroup("TeamSight Tracker") {
+            ContentView()
+                .preferredColorScheme(.light)
+        }
+        .defaultSize(width: 1000, height: 700)
+    }
+}
+        
         Settings {
             SettingsView()
         }
