@@ -2,8 +2,20 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab: String = "dashboard"
+    @State private var isLoggedIn = UserDefaults.standard.string(forKey: "memberId") != nil
     
     var body: some View {
+        if isLoggedIn {
+            mainApp
+        } else {
+            LoginView { memberId in
+                UserDefaults.standard.set(memberId.isEmpty ? "6a100df28c8a4d38a17c0c5f" : memberId, forKey: "memberId")
+                isLoggedIn = true
+            }
+        }
+    }
+    
+    private var mainApp: some View {
         NavigationSplitView {
             sidebar
         } detail: {
