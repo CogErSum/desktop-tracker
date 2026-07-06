@@ -3,12 +3,14 @@
     {
       "filename" : "icon.png",
       "idiom" : "mac",
-      "scale" : "1x"
+      "scale" : "1x",
+      "template-rendering-intent" : "template"
     },
     {
       "filename" : "icon.png",
       "idiom" : "mac",
-      "scale" : "2x"
+      "scale" : "2x",
+      "template-rendering-intent" : "template"
     }
   ],
   "info" : {
